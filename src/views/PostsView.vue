@@ -1,0 +1,7 @@
+<script setup lang="ts"></script>
+
+<template>
+  <h1 class="text-xl">Posts</h1>
+</template>
+
+<style></style>

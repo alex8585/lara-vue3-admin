@@ -13,7 +13,7 @@ const router = createRouter({
       component: DashboardView,
     },
     {
-      path: "/tags",
+      path: "/apptags",
       name: "Tags",
       component: TagsView,
     },

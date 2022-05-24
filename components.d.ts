@@ -5,14 +5,12 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AboutView: typeof import('./src/views/AboutView.vue')['default']
     AppLayout: typeof import('./src/layouts/AppLayout.vue')['default']
     AppLogo: typeof import('./src/components/base/AppLogo.vue')['default']
     AuthLayout: typeof import('./src/layouts/AuthLayout.vue')['default']
     CategoriesView: typeof import('./src/views/CategoriesView.vue')['default']
     DashboardView: typeof import('./src/views/DashboardView.vue')['default']
     DropdownLink: typeof import('./src/components/base/DropdownLink.vue')['default']
-    HomeView: typeof import('./src/views/HomeView.vue')['default']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
     IconDocumentation: typeof import('./src/components/icons/IconDocumentation.vue')['default']
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']

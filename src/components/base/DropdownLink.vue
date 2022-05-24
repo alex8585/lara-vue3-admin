@@ -14,5 +14,5 @@
 defineProps({
   href: String,
   icon: String,
-})
+});
 </script>

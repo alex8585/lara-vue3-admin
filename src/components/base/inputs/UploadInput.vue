@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue";
 const props = defineProps({
   initFiles: {
     default: () => [],
@@ -39,57 +39,57 @@ const props = defineProps({
     default: () => false,
     type: Boolean,
   },
-})
+});
 
 onMounted(() => {
-  files.value = props.initFiles
-  emit('mount')
-})
+  files.value = props.initFiles;
+  emit("mount");
+});
 
-const input = ref()
-const files = ref()
-const root = ref()
+const input = ref();
+const files = ref();
+const root = ref();
 
-const emit = defineEmits(['change', 'mount'])
+const emit = defineEmits(["change", "mount"]);
 
 function imgUrlFromFile(file) {
-  let urlCreator = window.URL || window.webkitURL
-  let imageUrl = urlCreator.createObjectURL(file)
-  return imageUrl
+  let urlCreator = window.URL || window.webkitURL;
+  let imageUrl = urlCreator.createObjectURL(file);
+  return imageUrl;
 }
 
 function deleteHandler(index) {
-  files.value.splice(index, 1)
-  emit('change', files.value)
+  files.value.splice(index, 1);
+  emit("change", files.value);
   /* console.log(files) */
 }
 
 function onChangeHandler(e) {
-  let curFiles = e.target.files
+  let curFiles = e.target.files;
 
   if (curFiles.length && !props.multiple) {
-    files.value = []
+    files.value = [];
   }
 
   for (const file of curFiles) {
-    files.value.push(file as any)
+    files.value.push(file as any);
   }
   /* console.log(files.value) */
 
-  emit('change', files.value)
+  emit("change", files.value);
 }
 
 function choiceFiles() {
-  input.value.click()
+  input.value.click();
 }
 const reset = () => {
-  files.value = []
-}
+  files.value = [];
+};
 
 defineExpose({
   root,
   reset,
-})
+});
 </script>
 
 <style scoped>

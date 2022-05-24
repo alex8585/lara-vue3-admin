@@ -56,18 +56,18 @@ async function onRequest(props) {
   loading.value = true;
   let { page, rowsPerPage, sortBy, descending } = props.pagination;
 
-  console.log(sortBy);
-
-  if (page == pagination.value.page) {
-    console.log("sort");
+  if (
+    sortBy != pagination.value.sortBy ||
+    descending != pagination.value.descending
+  ) {
+    page = pagination.value.page;
   }
 
   await tags.fetchTags(page, rowsPerPage, sortBy, descending);
 
-  page = tags.meta.page;
+  pagination.value.page = page;
   pagination.value.sortBy = sortBy;
   pagination.value.descending = descending;
-  pagination.value.page = page;
   pagination.value.rowsPerPage = rowsPerPage;
   pagination.value.rowsNumber = tags.meta.rowsNumber;
   loading.value = false;
@@ -76,6 +76,7 @@ async function onRequest(props) {
 
 <template>
   <q-table
+    :rows-per-page-options="[5, 10, 15, 20]"
     v-model:pagination="pagination"
     title="Tags"
     :loading="loading"

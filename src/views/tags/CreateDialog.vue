@@ -1,3 +1,73 @@
+<script lang="ts" setup>
+import { ref, onMounted } from "vue";
+import { TagRowFormType } from "@admin/types/data-table";
+
+const props = defineProps({
+  initValues: {
+    default: () => [],
+    type: Array,
+  },
+  show: {
+    default: false,
+    type: Boolean,
+  },
+});
+
+const emit = defineEmits(["change", "mount", "send"]);
+
+const dialogRef = ref();
+const isShow = ref(false);
+const errors = ref({});
+
+const initForm: TagRowFormType = {
+  name: null,
+};
+
+const form = ref(initForm);
+
+function onSend() {
+  emit("send", form);
+}
+
+onMounted(() => {
+  isShow.value = props.show;
+  emit("mount");
+});
+
+function hide() {
+  dialogRef.value.hide();
+}
+
+function set(row) {
+  for (const key in row) {
+    form.value[key] = row[key];
+  }
+}
+
+function reset() {
+  //form.value.clearErrors();
+  //set(initForm);
+  form.value = {};
+  errors.value = {};
+  emit("change", form);
+}
+
+function show() {
+  isShow.value = true;
+}
+
+function setErrors(err) {
+  errors.value = { ...err };
+}
+
+defineExpose({
+  setErrors,
+  reset,
+  hide,
+  show,
+});
+</script>
+
 <template>
   <q-dialog ref="dialogRef" v-model="isShow">
     <q-card style="width: 600px; max-width: 60vw">
@@ -22,21 +92,9 @@
                 <q-item-label class="q-pb-xs"> Name </q-item-label>
                 <q-input
                   v-model="form.name"
-                  :error-message="form.errors.name"
-                  :error="!!form.errors.name"
+                  :error-message="errors.name ? errors.name[0] : ''"
+                  :error="!!errors.name"
                   filled
-                />
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label class="q-pb-xs"> Order number </q-item-label>
-                <q-input
-                  v-model="form.order_number"
-                  :error-message="form.errors.order_number"
-                  :error="!!form.errors.order_number"
-                  filled
-                  type="number"
                 />
               </q-item-section>
             </q-item>
@@ -52,66 +110,3 @@
     </q-card>
   </q-dialog>
 </template>
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { useForm } from '@inertiajs/inertia-vue3'
-import { TagRowFormType } from '@admin/types/data-table'
-
-const props = defineProps({
-  initValues: {
-    default: () => [],
-    type: Array,
-  },
-  show: {
-    default: false,
-    type: Boolean,
-  },
-})
-
-const emit = defineEmits(['change', 'mount', 'send'])
-
-const isShow = ref(false)
-
-const initForm: TagRowFormType = {
-  name: null,
-  order_number: null,
-}
-
-const dialogRef = ref()
-const form = useForm(initForm)
-
-function onSend() {
-  emit('send', form)
-}
-
-onMounted(() => {
-  isShow.value = props.show
-  emit('mount')
-})
-
-function hide() {
-  dialogRef.value.hide()
-}
-
-function set(row) {
-  for (const key in row) {
-    form[key] = row[key]
-  }
-}
-
-function reset() {
-  form.clearErrors()
-  set(initForm)
-  emit('change', form)
-}
-
-function show() {
-  isShow.value = true
-}
-
-defineExpose({
-  reset,
-  hide,
-  show,
-})
-</script>

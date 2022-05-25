@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { useTagsStore } from "@/stores/tags";
-import { ref, onMounted, onUpdated } from "vue";
 import { shorten } from "@/support/helpers";
-//import { useRouter } from "vue-router";
 import { Col } from "@/types/data-table";
 
+import { ref } from "vue";
+import { usePagination } from "@/composables/pagination.ts";
 const tags = useTagsStore();
-//const router = useRouter();
+const { pagination, onRequest, loading, filter } = usePagination(tags);
+const tableRef = ref();
+
+function onFilterSend(form) {
+  filter.value = form.value;
+  pagination.value.page = 1;
+  tableRef.value.requestServerInteraction();
+}
 const columns: Array<Col> = [
   {
     name: "id",
@@ -33,49 +40,18 @@ const columns: Array<Col> = [
     align: "center",
   },
 ];
-const defaultPerPage = 5;
-
-const pagination = ref({
-  sortBy: "id",
-  descending: true,
-  page: 1,
-  rowsPerPage: defaultPerPage,
-  rowsNumber: tags.meta.rowsNumber,
-});
-
-//onUpdated(() => {});
-
-const loading = ref(false);
-
-onMounted(async () => {
-  await tags.fetchTags(1, defaultPerPage);
-  pagination.value.rowsNumber = tags.meta.rowsNumber;
-});
-
-async function onRequest(props) {
-  loading.value = true;
-  let { page, rowsPerPage, sortBy, descending } = props.pagination;
-
-  if (
-    sortBy != pagination.value.sortBy ||
-    descending != pagination.value.descending
-  ) {
-    page = pagination.value.page;
-  }
-
-  await tags.fetchTags(page, rowsPerPage, sortBy, descending);
-
-  pagination.value.page = page;
-  pagination.value.sortBy = sortBy;
-  pagination.value.descending = descending;
-  pagination.value.rowsPerPage = rowsPerPage;
-  pagination.value.rowsNumber = tags.meta.rowsNumber;
-  loading.value = false;
-}
 </script>
 
 <template>
+  <div class="mb-5">
+    <div class="head-buttons">
+      <div class="" style="width: 350px">
+        <Filter @send="onFilterSend" />
+      </div>
+    </div>
+  </div>
   <q-table
+    ref="tableRef"
     :rows-per-page-options="[5, 10, 15, 20]"
     v-model:pagination="pagination"
     title="Tags"

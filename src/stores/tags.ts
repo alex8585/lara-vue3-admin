@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-
+import { filterArrToFilterStr } from "@/support/helpers";
 import axios from "axios";
 const url = import.meta.env.VITE_API_URL + "/api/v1";
 
@@ -43,25 +43,26 @@ export const useTagsStore = defineStore({
     meta: (state) => state.tags.meta,
     loading: (state) => state._loading,
   },
-  // pagination.value.rowsNumber = 10;
-  // pagination.value.page = page;
-  // pagination.value.rowsPerPage = rowsPerPage;
 
   actions: {
-    async fetchTags(page = 1, perPage = 5, orderBy = "id", descending = true) {
+    async fetchTags(
+      page = 1,
+      perPage = 5,
+      orderBy = "id",
+      descending = true,
+      filter: any
+    ) {
       this._loading = true;
-      const res = await axios.get<any>(
-        `${url}/tags?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`
-      );
-      // const data = res.data as Tags;
+      const filterStr = filterArrToFilterStr(filter);
+      let tagsUrl = `${url}/tags?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
+
+      if (filterStr) {
+        tagsUrl = `${tagsUrl}${filterStr}`;
+      }
+      const res = await axios.get<any>(tagsUrl);
       this.tags.data = res.data.data;
       this.tags.meta = res.data.metaData;
-      // const meta = res.data.meta;
-      // this.tags.meta.rowsNumber = meta.total;
-      // this.tags.meta.page = meta.current_page;
-      // this.tags.meta.rowsPerPage = meta.per_page;
       this._loading = false;
-      // console.log(this.tags);
     },
     async fetchTag(id: number) {
       this._loading = true;

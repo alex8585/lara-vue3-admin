@@ -9,8 +9,11 @@ declare module '@vue/runtime-core' {
     AppLogo: typeof import('./src/components/base/AppLogo.vue')['default']
     AuthLayout: typeof import('./src/layouts/AuthLayout.vue')['default']
     CategoriesView: typeof import('./src/views/CategoriesView.vue')['default']
+    CreateDialog: typeof import('./src/views/tags/CreateDialog.vue')['default']
     DashboardView: typeof import('./src/views/DashboardView.vue')['default']
     DropdownLink: typeof import('./src/components/base/DropdownLink.vue')['default']
+    EditDialog: typeof import('./src/views/tags/EditDialog.vue')['default']
+    Filter: typeof import('./src/views/tags/Filter.vue')['default']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
     IconDocumentation: typeof import('./src/components/icons/IconDocumentation.vue')['default']
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
@@ -19,7 +22,7 @@ declare module '@vue/runtime-core' {
     PostsView: typeof import('./src/views/PostsView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TagsView: typeof import('./src/views/TagsView.vue')['default']
+    TagsView: typeof import('./src/views/tags/TagsView.vue')['default']
     UploadInput: typeof import('./src/components/base/inputs/UploadInput.vue')['default']
   }
 }

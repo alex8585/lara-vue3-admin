@@ -22,3 +22,17 @@ export function shorten(str: string, no_words: number, suff = " ...") {
   }
   return newStr;
 }
+export function filterArrToFilterStr(filter: any) {
+  let filterStr = "";
+
+  if (filter) {
+    const filterObj = filter.value;
+    if (filterObj) {
+      for (const prop in filterObj) {
+        const val = filterObj[prop];
+        filterStr += `&filter[${prop}]=${val}`;
+      }
+    }
+  }
+  return filterStr;
+}

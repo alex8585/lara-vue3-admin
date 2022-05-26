@@ -8,6 +8,8 @@ import useCreateRecord from "@/composables/createRecord.ts";
 import useEditRecord from "@/composables/editRecord.ts";
 import useDeleteRecord from "@/composables/deleteRecord.ts";
 
+import CreateDialog from "./CreateDialog.vue";
+import EditDialog from "./EditDialog.vue";
 const categories = useCategoriesStore();
 const tableRef = ref();
 const url = import.meta.env.VITE_API_URL + "/api/v1/categories";

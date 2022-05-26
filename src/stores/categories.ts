@@ -5,7 +5,7 @@ const url = import.meta.env.VITE_API_URL + "/api/v1/categories";
 
 interface Category {
   id?: number;
-  title?: string;
+  name?: string;
 }
 
 interface Categories {

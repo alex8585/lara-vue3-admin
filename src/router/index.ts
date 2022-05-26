@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "../views/DashboardView.vue";
 import CategoriesView from "../views/categories/IndexView.vue";
 import TagsView from "../views/tags/IndexView.vue";
-import PostsView from "../views/PostsView.vue";
+import PostsView from "../views/posts/IndexView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

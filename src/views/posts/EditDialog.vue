@@ -19,8 +19,9 @@ const isShow = ref(false);
 
 const initForm: TagRowFormType = {
   _method: "PUT",
-  name: null,
   id: null,
+  title: null,
+  description: null,
 };
 
 const dialogRef = ref();
@@ -83,7 +84,7 @@ defineExpose({
           class="float-right"
           color="grey-8"
         />
-        <div class="text-h6">Update Category</div>
+        <div class="text-h6">Update Post</div>
       </q-card-section>
       <q-separator inset />
       <q-card-section class="q-pt-none">
@@ -91,11 +92,24 @@ defineExpose({
           <q-list>
             <q-item>
               <q-item-section>
-                <q-item-label class="q-pb-xs"> Name </q-item-label>
+                <q-item-label class="q-pb-xs"> Title </q-item-label>
                 <q-input
-                  v-model="form.name"
-                  :error-message="errors.name ? errors.name[0] : ''"
-                  :error="!!errors.name"
+                  v-model="form.title"
+                  :error-message="errors.title ? errors.title[0] : ''"
+                  :error="!!errors.title"
+                  filled
+                />
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label class="q-pb-xs"> Description </q-item-label>
+                <q-input
+                  v-model="form.description"
+                  :error-message="
+                    errors.description ? errors.description[0] : ''
+                  "
+                  :error="!!errors.description"
                   filled
                 />
               </q-item-section>

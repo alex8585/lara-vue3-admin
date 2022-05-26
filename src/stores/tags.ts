@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 import { filterArrToFilterStr } from "@/support/helpers";
 import axios from "axios";
-const url = import.meta.env.VITE_API_URL + "/api/v1";
+const url = import.meta.env.VITE_API_URL + "/api/v1/tags";
 
 interface Tag {
   id?: number;
-  title?: string;
+  name?: string;
 }
 
 interface Tags {
@@ -54,7 +54,7 @@ export const useTagsStore = defineStore({
     ) {
       this._loading = true;
       const filterStr = filterArrToFilterStr(filter);
-      let tagsUrl = `${url}/tags?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
+      let tagsUrl = `${url}/?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
 
       if (filterStr) {
         tagsUrl = `${tagsUrl}${filterStr}`;

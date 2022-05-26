@@ -75,7 +75,7 @@ defineExpose({
           class="float-right"
           color="grey-8"
         />
-        <div class="text-h6">Create Tag</div>
+        <div class="text-h6">Create Category</div>
       </q-card-section>
       <q-separator inset />
       <q-card-section class="q-pt-none">

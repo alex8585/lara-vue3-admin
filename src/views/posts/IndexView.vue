@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTagsStore } from "@/stores/tags";
+import { usePostsStore } from "@/stores/posts";
 import { shorten } from "@/support/helpers";
 import { Col } from "@/types/data-table";
 import { ref } from "vue";
@@ -7,15 +7,14 @@ import usePagination from "@/composables/pagination.ts";
 import useCreateRecord from "@/composables/createRecord.ts";
 import useEditRecord from "@/composables/editRecord.ts";
 import useDeleteRecord from "@/composables/deleteRecord.ts";
-
 import CreateDialog from "./CreateDialog.vue";
 import EditDialog from "./EditDialog.vue";
-const tags = useTagsStore();
+const posts = usePostsStore();
 const tableRef = ref();
-const url = import.meta.env.VITE_API_URL + "/api/v1/tags";
+const url = import.meta.env.VITE_API_URL + "/api/v1/posts";
 
 const { pagination, onRequest, loading, onFilterSend } = usePagination(
-  tags,
+  posts,
   tableRef
 );
 const { editDialRef, editRow, editSendHandler } = useEditRecord(tableRef, url);
@@ -36,10 +35,10 @@ const columns: Array<Col> = [
     sortable: true,
   },
   {
-    name: "name",
+    name: "title",
     align: "left",
-    label: "Name",
-    field: "name",
+    label: "Title",
+    field: "title",
     format: (val) => shorten(val, 3, ""),
     sortable: true,
   },
@@ -80,9 +79,9 @@ const columns: Array<Col> = [
     ref="tableRef"
     :rows-per-page-options="[5, 10, 15, 20]"
     v-model:pagination="pagination"
-    title="Tags"
+    title="Posts"
     :loading="loading"
-    :rows="tags.data"
+    :rows="posts.data"
     :columns="columns"
     row-key="id"
     @request="onRequest"

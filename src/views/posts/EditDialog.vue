@@ -74,7 +74,8 @@ defineExpose({
 <template>
   <q-dialog ref="dialogRef" v-model="isShow">
     <q-card style="width: 600px; max-width: 60vw">
-      <q-card-section>
+      <q-card-section class="flex justify-between">
+        <div class="text-h6">Update Post</div>
         <q-btn
           v-close-popup
           round
@@ -84,7 +85,6 @@ defineExpose({
           class="float-right"
           color="grey-8"
         />
-        <div class="text-h6">Update Post</div>
       </q-card-section>
       <q-separator inset />
       <q-card-section class="q-pt-none">

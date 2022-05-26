@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "../views/DashboardView.vue";
-import CategoriesView from "../views/CategoriesView.vue";
-import TagsView from "../views/tags/TagsView.vue";
+import CategoriesView from "../views/categories/IndexView.vue";
+import TagsView from "../views/tags/IndexView.vue";
 import PostsView from "../views/PostsView.vue";
 
 const router = createRouter({

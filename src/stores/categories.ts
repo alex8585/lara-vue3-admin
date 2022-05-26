@@ -1,15 +1,15 @@
 import { defineStore } from "pinia";
 import { filterArrToFilterStr } from "@/support/helpers";
 import axios from "axios";
-const url = import.meta.env.VITE_API_URL + "/api/v1";
+const url = import.meta.env.VITE_API_URL + "/api/v1/categories";
 
-interface Tag {
+interface Category {
   id?: number;
   title?: string;
 }
 
-interface Tags {
-  data: Tag[];
+interface Categories {
+  data: Category[];
   meta: {
     rowsNumber: number;
     page: number;
@@ -17,16 +17,16 @@ interface Tags {
   };
 }
 interface State {
-  tags: Tags;
-  tag: Tag;
+  categories: Categories;
+  category: Category;
   _loading: boolean;
 }
 
-export const useTagsStore = defineStore({
-  id: "tags",
+export const useCategoriesStore = defineStore({
+  id: "categories",
   state: () =>
     <State>{
-      tags: {
+      categories: {
         data: [],
         meta: {
           rowsPerPage: 5,
@@ -34,13 +34,13 @@ export const useTagsStore = defineStore({
           rowsNumber: 0,
         },
       },
-      tag: {},
+      category: {},
       _loading: false,
     },
 
   getters: {
-    data: (state) => state.tags.data,
-    meta: (state) => state.tags.meta,
+    data: (state) => state.categories.data,
+    meta: (state) => state.categories.meta,
     loading: (state) => state._loading,
   },
 
@@ -54,21 +54,14 @@ export const useTagsStore = defineStore({
     ) {
       this._loading = true;
       const filterStr = filterArrToFilterStr(filter);
-      let tagsUrl = `${url}/tags?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
+      let tagsUrl = `${url}/?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
 
       if (filterStr) {
         tagsUrl = `${tagsUrl}${filterStr}`;
       }
       const res = await axios.get<any>(tagsUrl);
-      this.tags.data = res.data.data;
-      this.tags.meta = res.data.metaData;
-      this._loading = false;
-    },
-    async fetchTag(id: number) {
-      this._loading = true;
-      const res = await axios.get<Tag>(`${url}/tags/${id}`);
-      const data = res.data as Tag;
-      this.tag = data;
+      this.categories.data = res.data.data;
+      this.categories.meta = res.data.metaData;
       this._loading = false;
     },
   },

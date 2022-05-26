@@ -1,10 +1,10 @@
-import { Model } from './model'
+import { Model } from "./model";
 
 export class Tag extends Model {
   constructor(public id: number, public name: string, public slug: string) {
-    super(id)
+    super(id);
   }
   toString() {
-    return this.name
+    return this.name;
   }
 }

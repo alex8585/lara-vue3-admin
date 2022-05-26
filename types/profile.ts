@@ -1,4 +1,4 @@
-import { Model } from './model'
+import { Model } from "./model";
 
 export class Profile extends Model {
   constructor(
@@ -7,9 +7,9 @@ export class Profile extends Model {
     public email: string,
     public is_impersonating: boolean
   ) {
-    super(id)
+    super(id);
   }
   toString() {
-    return this.name
+    return this.name;
   }
 }

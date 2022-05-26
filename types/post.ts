@@ -1,6 +1,6 @@
-import { Model } from './model'
-import { Tag } from './tag'
-import { User } from './user'
+import { Model } from "./model";
+import { Tag } from "./tag";
+import { User } from "./user";
 
 export class Post extends Model {
   constructor(
@@ -24,18 +24,18 @@ export class Post extends Model {
     public user: User,
     public tags: Tag[]
   ) {
-    super(id)
+    super(id);
   }
   toString() {
-    return this.title
+    return this.title;
   }
 }
 
 export class PostCategory extends Model {
   constructor(public id: number, public name: string, public slug: string) {
-    super(id)
+    super(id);
   }
   toString() {
-    return this.name
+    return this.name;
   }
 }

@@ -2,17 +2,27 @@
 import { useTagsStore } from "@/stores/tags";
 import { shorten } from "@/support/helpers";
 import { Col } from "@/types/data-table";
-
-import axios from "axios";
 import { ref } from "vue";
-import { usePagination } from "@/composables/pagination.ts";
-const tags = useTagsStore();
-const { pagination, onRequest, loading, filter } = usePagination(tags);
-const tableRef = ref();
-const createDialRef = ref();
-const editDialRef = ref();
+import usePagination from "@/composables/pagination.ts";
+import useCreateRecord from "@/composables/createRecord.ts";
+import useEditRecord from "@/composables/editRecord.ts";
+import useDeleteRecord from "@/composables/deleteRecord.ts";
 
-const url = import.meta.env.VITE_API_URL + "/api/v1";
+const tags = useTagsStore();
+const tableRef = ref();
+const url = import.meta.env.VITE_API_URL + "/api/v1/tags";
+
+const { pagination, onRequest, loading, onFilterSend } = usePagination(
+  tags,
+  tableRef
+);
+const { editDialRef, editRow, editSendHandler } = useEditRecord(tableRef, url);
+const { deleteConfirm } = useDeleteRecord(tableRef, url);
+const { createDialRef, createDialog, createSendHandler } = useCreateRecord(
+  tableRef,
+  url
+);
+
 const columns: Array<Col> = [
   {
     name: "id",
@@ -39,40 +49,13 @@ const columns: Array<Col> = [
     align: "center",
   },
 ];
-
-function onFilterSend(form) {
-  filter.value = form.value;
-  pagination.value.page = 1;
-  tableRef.value.requestServerInteraction();
-}
-
-function createDialog() {
-  createDialRef.value.reset();
-  createDialRef.value.show();
-}
-
-function createSendHandler(form) {
-  axios
-    .post(`${url}/tags/`, form.value)
-    .then(function (res) {
-      let msg = res.data.message;
-      console.log(msg);
-      createDialRef.value.reset();
-      createDialRef.value.hide();
-    })
-    .catch(function (error) {
-      if (error.response.data.errors) {
-        createDialRef.value.setErrors(error.response.data.errors);
-      }
-    });
-}
 </script>
 
 <template>
   <div class="mb-5">
     <div class="head-buttons">
       <div class="" style="width: 350px">
-        <Filter @send="onFilterSend" />
+        <FilterForm @send="onFilterSend" />
       </div>
       <div>
         <!-- <q-input -->
@@ -131,7 +114,7 @@ function createSendHandler(form) {
     </template>
   </q-table>
   <CreateDialog ref="createDialRef" @send="createSendHandler" />
-  <!-- <EditDialog ref="editDialRef" @send="editSendHandler" /> -->
+  <EditDialog ref="editDialRef" @send="editSendHandler" />
 </template>
 
 <style></style>

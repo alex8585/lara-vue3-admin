@@ -1,4 +1,4 @@
-import { Model } from './model'
+import { Model } from "./model";
 
 export class User extends Model {
   constructor(
@@ -13,9 +13,9 @@ export class User extends Model {
     public can_be_updated: boolean,
     public can_be_impersonated: boolean
   ) {
-    super(id)
+    super(id);
   }
   toString() {
-    return this.name
+    return this.name;
   }
 }

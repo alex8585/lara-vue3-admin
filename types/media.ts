@@ -1,7 +1,7 @@
 interface Media {
-  preview_url: string
-  original_url: string
-  name: string
+  preview_url: string;
+  original_url: string;
+  name: string;
 }
 
-export { Media }
+export { Media };

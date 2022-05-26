@@ -1,5 +1,6 @@
 import { ref, onMounted } from "vue";
 
+import type { Ref } from "vue";
 interface PaginationProos {
   pagination: {
     page: number;
@@ -9,7 +10,11 @@ interface PaginationProos {
   };
 }
 
-export function usePagination(items: any, defaultPerPage = 5) {
+export default function usePagination(
+  items: any,
+  tableRef: Ref,
+  defaultPerPage = 5
+) {
   const loading = ref(false);
   const filter = ref({});
 
@@ -22,7 +27,7 @@ export function usePagination(items: any, defaultPerPage = 5) {
   });
 
   onMounted(async () => {
-    await items.fetchTags(1, defaultPerPage);
+    await items.fetchItems(1, defaultPerPage);
     pagination.value.rowsNumber = items.meta.rowsNumber;
   });
 
@@ -37,7 +42,7 @@ export function usePagination(items: any, defaultPerPage = 5) {
       page = pagination.value.page;
     }
 
-    await items.fetchTags(page, rowsPerPage, sortBy, descending, filter);
+    await items.fetchItems(page, rowsPerPage, sortBy, descending, filter);
 
     pagination.value.page = page;
     pagination.value.sortBy = sortBy;
@@ -46,5 +51,11 @@ export function usePagination(items: any, defaultPerPage = 5) {
     pagination.value.rowsNumber = items.meta.rowsNumber;
     loading.value = false;
   }
-  return { pagination, onRequest, loading, filter };
+  function onFilterSend(form: any) {
+    filter.value = form.value;
+    pagination.value.page = 1;
+    tableRef.value.requestServerInteraction();
+  }
+
+  return { pagination, onRequest, loading, filter, onFilterSend };
 }

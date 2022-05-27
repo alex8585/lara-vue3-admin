@@ -17,6 +17,7 @@ interface Tags {
   };
 }
 interface State {
+  _allTags: Tag[];
   tags: Tags;
   tag: Tag;
   _loading: boolean;
@@ -26,6 +27,7 @@ export const useTagsStore = defineStore({
   id: "tags",
   state: () =>
     <State>{
+      _allTags: [],
       tags: {
         data: [],
         meta: {
@@ -42,9 +44,18 @@ export const useTagsStore = defineStore({
     data: (state) => state.tags.data,
     meta: (state) => state.tags.meta,
     loading: (state) => state._loading,
+    allTags: (state) => state._allTags,
   },
 
   actions: {
+    async getAllTags() {
+      this._loading = true;
+      const tagsUrl = `${url}?perPage=-1`;
+      const res = await axios.get<any>(tagsUrl);
+      this._allTags = [...res.data];
+      this._loading = false;
+    },
+
     async fetchItems(
       page = 1,
       perPage = 5,

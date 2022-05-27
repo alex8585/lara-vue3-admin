@@ -79,12 +79,12 @@ export const usePostsStore = defineStore({
     ) {
       this._loading = true;
       const filterStr = filterArrToFilterStr(filter);
-      let tagsUrl = `${url}/?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
+      let itemsUrl = `${url}/?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
 
       if (filterStr) {
-        tagsUrl = `${tagsUrl}${filterStr}`;
+        itemsUrl = `${itemsUrl}${filterStr}`;
       }
-      const res = await axios.get<any>(tagsUrl);
+      const res = await axios.get<any>(itemsUrl);
       this.posts.data = res.data.data;
       this.posts.meta = res.data.metaData;
       this._loading = false;

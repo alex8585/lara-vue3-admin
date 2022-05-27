@@ -4,4 +4,4 @@ interface Media {
   name: string;
 }
 
-export { Media };
+export type { Media };

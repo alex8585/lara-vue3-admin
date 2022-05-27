@@ -1,6 +1,6 @@
 import { Model } from "./model";
-import { Tag } from "./tag";
-import { User } from "./user";
+import type { Tag } from "./tag";
+import type { User } from "./user";
 
 export class Post extends Model {
   constructor(

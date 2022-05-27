@@ -17,6 +17,7 @@ interface Categories {
   };
 }
 interface State {
+  _allCategories: Category[];
   categories: Categories;
   category: Category;
   _loading: boolean;
@@ -26,6 +27,7 @@ export const useCategoriesStore = defineStore({
   id: "categories",
   state: () =>
     <State>{
+      _allCategories: [],
       categories: {
         data: [],
         meta: {
@@ -39,12 +41,19 @@ export const useCategoriesStore = defineStore({
     },
 
   getters: {
+    allCats: (state) => state._allCategories,
     data: (state) => state.categories.data,
     meta: (state) => state.categories.meta,
     loading: (state) => state._loading,
   },
 
   actions: {
+    async getAllCategories() {
+      const catsUrl = `${url}?perPage=-1`;
+      const res = await axios.get<any>(catsUrl);
+      this._allCategories = res.data;
+    },
+
     async fetchItems(
       page = 1,
       perPage = 5,

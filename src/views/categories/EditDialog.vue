@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import { TagRowFormType } from "@admin/types/data-table";
+import type { CategoryForm } from "@/types/data-table";
 
 const props = defineProps({
   initValues: {
@@ -17,16 +17,16 @@ const emit = defineEmits(["change", "mount", "send"]);
 
 const isShow = ref(false);
 
-const initForm: TagRowFormType = {
+const initForm = {
   _method: "PUT",
   name: null,
   id: null,
 };
 
 const dialogRef = ref();
-const form = ref(initForm);
+const form = ref<CategoryForm>(initForm);
 
-const errors = ref({});
+const errors = ref<any>({});
 function onSend() {
   emit("send", form);
 }
@@ -36,7 +36,7 @@ onMounted(() => {
   emit("mount");
 });
 
-function set(row) {
+function set(row: CategoryForm) {
   form.value = { ...row };
   form.value._method = "PUT";
 }
@@ -57,7 +57,7 @@ function show() {
   isShow.value = true;
 }
 
-function setErrors(err) {
+function setErrors(err: {}) {
   errors.value = { ...err };
 }
 defineExpose({

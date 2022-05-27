@@ -8,9 +8,14 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
+interface Route {
+  name: "string";
+  path: "string";
+}
+
 const route = useRoute();
 const router = useRouter();
-const routes = router.options.routes;
+const routes: Route[] = router.options.routes as Route[];
 
 const icons = {
   Tags: "dashboard",
@@ -19,7 +24,7 @@ const icons = {
   Dashboard: "dashboard",
 };
 
-function isCurrentUrl(url) {
+function isCurrentUrl(url: "string") {
   return url == route.path;
 }
 </script>
@@ -40,33 +45,7 @@ function isCurrentUrl(url) {
         <q-toolbar-title> Admin panel </q-toolbar-title>
         <div class="q-pa-md">
           <q-btn-dropdown color="primary" label="Account">
-            <q-list>
-              <template #content>
-                <!-- Account Management -->
-                <div class="block px-4 py-2 text-xs text-gray-400"></div>
-
-                <div class="border-t border-gray-100" />
-
-                <!-- Authentication -->
-                <dropdown-link
-                  v-if="$page.props.auth.is_impersonating"
-                  icon="lock-open"
-                  class="bg-yellow-300 hover:bg-yellow-500"
-                  @click="stopImpersonate"
-                >
-                </dropdown-link>
-
-                <!-- Authentication -->
-                <dropdown-link icon="logout" @click="logout"> </dropdown-link>
-              </template>
-              <dropdown-link icon="logout" @click="logout">
-                <q-item>
-                  <q-item-section>
-                    <q-item-label> </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </dropdown-link>
-            </q-list>
+            <q-list> </q-list>
           </q-btn-dropdown>
         </div>
       </q-toolbar>

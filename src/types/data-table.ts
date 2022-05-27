@@ -63,3 +63,20 @@ export interface PortfolioRowFormType {
   files: File[];
   tags: OptionType[];
 }
+
+export interface TagForm {
+  id?: number | null;
+  name: string | null;
+  _method?: string;
+}
+export interface CategoryForm {
+  id?: number | null;
+  name: string | null;
+  _method?: string;
+}
+export interface PostForm {
+  id?: number | null;
+  title: string | null;
+  description: string | null;
+  _method?: string;
+}

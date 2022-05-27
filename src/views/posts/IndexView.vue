@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { usePostsStore } from "@/stores/posts";
 import { shorten } from "@/support/helpers";
-import { Col } from "@/types/data-table";
-import { ref } from "vue";
-import usePagination from "@/composables/pagination.ts";
-import useCreateRecord from "@/composables/createRecord.ts";
-import useEditRecord from "@/composables/editRecord.ts";
-import useDeleteRecord from "@/composables/deleteRecord.ts";
+import type { Col } from "@/types/data-table";
+import { ref, onMounted } from "vue";
+import usePagination from "@/composables/pagination";
+import useCreateRecord from "@/composables/createRecord";
+import useEditRecord from "@/composables/editRecord";
+import useDeleteRecord from "@/composables/deleteRecord";
 import CreateDialog from "./CreateDialog.vue";
 import EditDialog from "./EditDialog.vue";
+
+import { useTagsStore } from "@/stores/tags";
+import { useCategoriesStore } from "@/stores/categories";
+
+const tags = useTagsStore();
+const cats = useCategoriesStore();
 const posts = usePostsStore();
 const tableRef = ref();
 const url = import.meta.env.VITE_API_URL + "/api/v1/posts";
@@ -30,8 +36,8 @@ const columns: Array<Col> = [
     required: true,
     label: "ID",
     align: "left",
-    field: (row) => row.id,
-    format: (val) => `${val}`,
+    field: (row: { id: "string" }) => row.id,
+    format: (val: "string") => `${val}`,
     sortable: true,
   },
   {
@@ -39,7 +45,7 @@ const columns: Array<Col> = [
     align: "left",
     label: "Title",
     field: "title",
-    format: (val) => shorten(val, 3, ""),
+    format: (val: "string") => shorten(val, 3, ""),
     sortable: true,
   },
   {
@@ -50,6 +56,10 @@ const columns: Array<Col> = [
     align: "center",
   },
 ];
+
+onMounted(async () => {
+  //await cats.getAllCategories();
+});
 </script>
 
 <template>

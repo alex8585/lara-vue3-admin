@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useTagsStore } from "@/stores/tags";
 import { shorten } from "@/support/helpers";
-import { Col } from "@/types/data-table";
+import type { Col } from "@/types/data-table";
 import { ref } from "vue";
-import usePagination from "@/composables/pagination.ts";
-import useCreateRecord from "@/composables/createRecord.ts";
-import useEditRecord from "@/composables/editRecord.ts";
-import useDeleteRecord from "@/composables/deleteRecord.ts";
+import usePagination from "@/composables/pagination";
+import useCreateRecord from "@/composables/createRecord";
+import useEditRecord from "@/composables/editRecord";
+import useDeleteRecord from "@/composables/deleteRecord";
 
 import CreateDialog from "./CreateDialog.vue";
 import EditDialog from "./EditDialog.vue";
@@ -31,8 +31,8 @@ const columns: Array<Col> = [
     required: true,
     label: "ID",
     align: "left",
-    field: (row) => row.id,
-    format: (val) => `${val}`,
+    field: (row: { id: "string" }) => row.id,
+    format: (val: "string") => `${val}`,
     sortable: true,
   },
   {
@@ -40,7 +40,7 @@ const columns: Array<Col> = [
     align: "left",
     label: "Name",
     field: "name",
-    format: (val) => shorten(val, 3, ""),
+    format: (val: "string") => shorten(val, 3, ""),
     sortable: true,
   },
   {

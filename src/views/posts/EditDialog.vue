@@ -1,7 +1,13 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import { TagRowFormType } from "@admin/types/data-table";
+import type { OptionType, PostForm, TagType } from "@/types/data-table";
 
+import { useTagsStore } from "@/stores/tags";
+import { useCategoriesStore } from "@/stores/categories";
+
+const tags = useTagsStore();
+const cats = useCategoriesStore();
+let tagsOptions: Array<OptionType> = [];
 const props = defineProps({
   initValues: {
     default: () => [],
@@ -17,29 +23,46 @@ const emit = defineEmits(["change", "mount", "send"]);
 
 const isShow = ref(false);
 
-const initForm: TagRowFormType = {
+const initForm = {
   _method: "PUT",
   id: null,
   title: null,
   description: null,
+  tags: [],
 };
 
 const dialogRef = ref();
-const form = ref(initForm);
+const form = ref<PostForm>(initForm);
 
-const errors = ref({});
+const errors = ref<any>({});
 function onSend() {
   emit("send", form);
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await tags.getAllTags();
+  await cats.getAllCategories();
+
+  for (const tag of [...tags.allTags] as Array<TagType>) {
+    let option = {
+      label: tag.name,
+      value: tag.id,
+    };
+    tagsOptions.push(option);
+  }
   isShow.value = props.show;
   emit("mount");
 });
 
-function set(row) {
-  form.value = { ...row };
-  form.value._method = "PUT";
+function set(row: PostForm) {
+  form.value = { ...row, tags: [], _method: "PUT" };
+  for (const tag of row.tags as Array<TagType>) {
+    let option: OptionType = {
+      label: tag.name,
+      value: tag.id,
+    };
+    form.value.tags.push(option);
+  }
 }
 
 function hide() {
@@ -58,7 +81,7 @@ function show() {
   isShow.value = true;
 }
 
-function setErrors(err) {
+function setErrors(err: {}) {
   errors.value = { ...err };
 }
 defineExpose({
@@ -111,6 +134,18 @@ defineExpose({
                   "
                   :error="!!errors.description"
                   filled
+                />
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-select
+                  v-model="form.tags"
+                  filled
+                  multiple
+                  :options="tagsOptions"
+                  label="Tags"
+                  style="width: 250px"
                 />
               </q-item-section>
             </q-item>

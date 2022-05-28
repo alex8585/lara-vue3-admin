@@ -1,29 +1,41 @@
-<script>
-import { ref } from "vue";
-import { mainNav, isTitle, isLink } from "@/_nav";
+<script setup lang="ts">
+import { RouterLink } from "vue-router";
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import useAuth from "@/composables/auth";
 
-export default {
-  name: "AppLayout",
-  setup() {
-    const leftDrawerOpen = ref(false);
-    function toggleLeftDrawer() {
-      leftDrawerOpen.value = !leftDrawerOpen.value;
-    }
+const leftDrawerOpen = ref(false);
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
 
-    function logout() {
-      //Inertia.post(route("logout"));
-    }
+interface Route {
+  name: "string";
+  path: "string";
+}
 
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer,
-      mainNav,
-      isTitle,
-      isLink,
-      logout,
-    };
-  },
+const route = useRoute();
+const router = useRouter();
+const routes: Route[] = router.options.routes as Route[];
+
+const icons = {
+  Dashboard: "dashboard",
+  Categories: "collections",
+  Posts: "library_books",
+  Tags: "local_offer",
 };
+
+const { isLoged } = useAuth();
+
+onMounted(() => {
+  if (!isLoged.value) {
+    router.push("/login");
+  }
+});
+
+function isCurrentUrl(url: "string") {
+  return url == route.path;
+}
 </script>
 
 <template>
@@ -42,33 +54,7 @@ export default {
         <q-toolbar-title> Admin panel </q-toolbar-title>
         <div class="q-pa-md">
           <q-btn-dropdown color="primary" label="Account">
-            <q-list>
-              <template #content>
-                <!-- Account Management -->
-                <div class="block px-4 py-2 text-xs text-gray-400"></div>
-
-                <div class="border-t border-gray-100" />
-
-                <!-- Authentication -->
-                <dropdown-link
-                  v-if="$page.props.auth.is_impersonating"
-                  icon="lock-open"
-                  class="bg-yellow-300 hover:bg-yellow-500"
-                  @click="stopImpersonate"
-                >
-                </dropdown-link>
-
-                <!-- Authentication -->
-                <dropdown-link icon="logout" @click="logout"> </dropdown-link>
-              </template>
-              <dropdown-link icon="logout" @click="logout">
-                <q-item>
-                  <q-item-section>
-                    <q-item-label> </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </dropdown-link>
-            </q-list>
+            <q-list> </q-list>
           </q-btn-dropdown>
         </div>
       </q-toolbar>
@@ -77,45 +63,34 @@ export default {
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered class="bg-grey-2">
       <q-list>
         <q-item-label header> Menu </q-item-label>
-
-        <div v-for="(link, i) in mainNav" :key="i" class="mb-4 group">
-          <a
-            v-if="isLink(link)"
+        <div v-for="(r, i) in routes" :key="i" class="mb-4 group">
+          <RouterLink
+            v-if="icons[r.name]"
             class="flex items-center"
-            :href="link.href"
-            :class="{ active: link.active() }"
+            :class="{ active: isCurrentUrl(r.path) }"
+            :to="r.path"
           >
             <q-item>
               <q-item-section avatar>
-                <q-icon :name="`${link.newicon}`" />
-
-                <!-- <component :is="`${link.icon}-icon-solid`" class="w-5 h-5 mr-2" /> -->
+                <q-icon :name="icons[r.name]" />
               </q-item-section>
               <q-item-section>
-                {{ link.text }}
+                {{ r.name }}
               </q-item-section>
             </q-item>
-          </a>
-
-          <h3
-            v-if="isTitle(link)"
-            class="text-primary-300 text-xs uppercase font-bold pt-4 pb-2 border-primary-300 border-b-1"
-          >
-            {{ link.title }}
-          </h3>
+          </RouterLink>
         </div>
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <main class="px-4 py-8 md:p-8">
-        <slot />
-      </main>
+      <main class="px-4 py-8 md:p-8"><slot /></main>
     </q-page-container>
   </q-layout>
 </template>
+<style lang="scss">
+@import "@/assets/base.css";
 
-<style lang="postcss" scoped>
 a {
   &:hover {
     background-color: #dfdfdf !important;

@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import type { Ref } from "vue";
-import axios from "axios";
 
+import axiosClient from "@/support/axiosClient";
 export default function useEditRecord(tableRef: Ref, url: string) {
   const editDialRef = ref();
 
@@ -13,7 +13,7 @@ export default function useEditRecord(tableRef: Ref, url: string) {
   }
 
   function editSendHandler(form: Ref) {
-    axios
+    axiosClient
       .post(`${url}/${form.value.id}`, form.value)
       .then(function (res) {
         const msg = res.data.message;

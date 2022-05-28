@@ -1,6 +1,6 @@
 import type { Ref } from "vue";
-import axios from "axios";
 
+import axiosClient from "@/support/axiosClient";
 import { useQuasar } from "quasar";
 export default function useDeleteRecord(tableRef: Ref, url: string) {
   const $q = useQuasar();
@@ -17,7 +17,7 @@ export default function useDeleteRecord(tableRef: Ref, url: string) {
 
   function deleteRow(params: any) {
     const { row } = params;
-    axios
+    axiosClient
       .delete(`${url}/${row.id}`)
       .then(function (res) {
         tableRef.value.requestServerInteraction();

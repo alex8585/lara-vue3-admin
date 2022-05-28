@@ -3,9 +3,11 @@ import DashboardView from "../views/DashboardView.vue";
 import CategoriesView from "../views/categories/IndexView.vue";
 import TagsView from "../views/tags/IndexView.vue";
 import PostsView from "../views/posts/IndexView.vue";
-
+import RegisterView from "@/views/auth/RegisterView.vue";
+import LoginView from "@/views/auth/LoginView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  // mode: "history",
   routes: [
     {
       path: "/",
@@ -26,6 +28,17 @@ const router = createRouter({
       path: "/posts",
       name: "Posts",
       component: PostsView,
+    },
+
+    {
+      path: "/register",
+      name: "Registration",
+      component: RegisterView,
+    },
+    {
+      path: "/login",
+      name: "Login",
+      component: LoginView,
     },
 
     // {

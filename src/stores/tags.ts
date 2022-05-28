@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { filterArrToFilterStr } from "@/support/helpers";
-import axios from "axios";
-const url = import.meta.env.VITE_API_URL + "/api/v1/tags";
+import axiosClient from "@/support/axiosClient";
+const url = "/api/v1/tags";
 
 interface Tag {
   id?: number;
@@ -51,7 +51,7 @@ export const useTagsStore = defineStore({
     async getAllTags() {
       this._loading = true;
       const tagsUrl = `${url}?perPage=-1`;
-      const res = await axios.get<any>(tagsUrl);
+      const res = await axiosClient.get<any>(tagsUrl);
       this._allTags = [...res.data];
       this._loading = false;
     },
@@ -70,14 +70,14 @@ export const useTagsStore = defineStore({
       if (filterStr) {
         tagsUrl = `${tagsUrl}${filterStr}`;
       }
-      const res = await axios.get<any>(tagsUrl);
+      const res = await axiosClient.get<any>(tagsUrl);
       this.tags.data = res.data.data;
       this.tags.meta = res.data.metaData;
       this._loading = false;
     },
     async fetchTag(id: number) {
       this._loading = true;
-      const res = await axios.get<Tag>(`${url}/tags/${id}`);
+      const res = await axiosClient.get<Tag>(`${url}/tags/${id}`);
       const data = res.data as Tag;
       this.tag = data;
       this._loading = false;

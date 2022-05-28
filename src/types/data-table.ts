@@ -49,7 +49,7 @@ export interface UserRowFormType {
 }
 export interface OptionType {
   label: string;
-  value: number;
+  value: number | null;
 }
 export interface TagType {
   name: string;
@@ -61,7 +61,7 @@ export interface PortfolioRowFormType {
   order_number: string;
   id?: number | null;
   files: File[];
-  tags: OptionType[];
+  tags: TagType[];
 }
 
 export interface TagForm {
@@ -79,4 +79,6 @@ export interface PostForm {
   title: string | null;
   description: string | null;
   _method?: string;
+  tags: OptionType[];
+  category?: {} | null;
 }

@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import type { Ref } from "vue";
-import axios from "axios";
+import axiosClient from "@/support/axiosClient";
 
 export default function useCreateRecord(tableRef: Ref, url: string) {
   const createDialRef = ref();
@@ -11,7 +11,7 @@ export default function useCreateRecord(tableRef: Ref, url: string) {
   }
 
   function createSendHandler(form: any) {
-    axios
+    axiosClient
       .post(`${url}/`, form.value)
       .then(function (res) {
         const msg = res.data.message;

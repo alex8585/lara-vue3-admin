@@ -31,6 +31,7 @@ const initForm = {
   title: null,
   description: null,
   tags: [],
+  category: { label: "Default", value: null },
 };
 
 const dialogRef = ref();
@@ -65,7 +66,7 @@ onMounted(async () => {
   emit("mount");
 });
 
-function set(row: PostForm) {
+function set(row: any) {
   form.value = { ...row, tags: [], _method: "PUT" };
   for (const tag of row.tags as Array<TagType>) {
     let option: OptionType = {

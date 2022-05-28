@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { filterArrToFilterStr } from "@/support/helpers";
-import axios from "axios";
-const url = import.meta.env.VITE_API_URL + "/api/v1/categories";
+import axiosClient from "@/support/axiosClient";
+
+const url = "/api/v1/categories";
 
 interface Category {
   id?: number;
@@ -50,7 +51,7 @@ export const useCategoriesStore = defineStore({
   actions: {
     async getAllCategories() {
       const catsUrl = `${url}?perPage=-1`;
-      const res = await axios.get<any>(catsUrl);
+      const res = await axiosClient.get<any>(catsUrl);
       this._allCategories = res.data;
     },
 
@@ -68,7 +69,7 @@ export const useCategoriesStore = defineStore({
       if (filterStr) {
         tagsUrl = `${tagsUrl}${filterStr}`;
       }
-      const res = await axios.get<any>(tagsUrl);
+      const res = await axiosClient.get<any>(tagsUrl);
       this.categories.data = res.data.data;
       this.categories.meta = res.data.metaData;
       this._loading = false;

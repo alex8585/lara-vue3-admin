@@ -18,10 +18,10 @@ const router = useRouter();
 const routes: Route[] = router.options.routes as Route[];
 
 const icons = {
-  Tags: "dashboard",
-  Categories: "dashboard",
-  Posts: "dashboard",
   Dashboard: "dashboard",
+  Categories: "collections",
+  Posts: "library_books",
+  Tags: "local_offer",
 };
 
 function isCurrentUrl(url: "string") {

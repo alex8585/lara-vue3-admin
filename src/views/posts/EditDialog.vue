@@ -8,6 +8,8 @@ import { useCategoriesStore } from "@/stores/categories";
 const tags = useTagsStore();
 const cats = useCategoriesStore();
 let tagsOptions: Array<OptionType> = [];
+let catsOptions: Array<OptionType> = [];
+
 const props = defineProps({
   initValues: {
     default: () => [],
@@ -50,6 +52,15 @@ onMounted(async () => {
     };
     tagsOptions.push(option);
   }
+
+  catsOptions.push({ label: "Default", value: null });
+  for (const cat of [...cats.allCats] as Array<TagType>) {
+    let option = {
+      label: cat.name,
+      value: cat.id,
+    };
+    catsOptions.push(option);
+  }
   isShow.value = props.show;
   emit("mount");
 });
@@ -63,6 +74,11 @@ function set(row: PostForm) {
     };
     form.value.tags.push(option);
   }
+  let option: OptionType = {
+    label: row.category.name,
+    value: row.category.id,
+  };
+  form.value.category = option;
 }
 
 function hide() {
@@ -145,6 +161,15 @@ defineExpose({
                   multiple
                   :options="tagsOptions"
                   label="Tags"
+                  style="width: 250px"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-select
+                  v-model="form.category"
+                  filled
+                  :options="catsOptions"
+                  label="Category"
                   style="width: 250px"
                 />
               </q-item-section>

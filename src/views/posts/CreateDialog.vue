@@ -22,6 +22,7 @@ const props = defineProps({
 const emit = defineEmits(["change", "mount", "send"]);
 
 let tagOptions: Array<OptionType> = [];
+let catsOptions: Array<OptionType> = [];
 
 const dialogRef = ref();
 const isShow = ref(false);
@@ -31,6 +32,7 @@ const initForm = {
   title: null,
   description: null,
   tags: [],
+  category: { label: "Default", value: null },
 };
 
 const form = ref<PostForm>(initForm);
@@ -52,6 +54,14 @@ onMounted(async () => {
       value: tag.id,
     };
     tagOptions.push(option);
+  }
+  catsOptions.push({ label: "Default", value: null });
+  for (const cat of [...cats.allCats] as Array<TagType>) {
+    let option = {
+      label: cat.name,
+      value: cat.id,
+    };
+    catsOptions.push(option);
   }
   isShow.value = props.show;
   emit("mount");
@@ -129,6 +139,15 @@ defineExpose({
                   multiple
                   :options="tagOptions"
                   label="Tags"
+                  style="width: 250px"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-select
+                  v-model="form.category"
+                  filled
+                  :options="catsOptions"
+                  label="Category"
                   style="width: 250px"
                 />
               </q-item-section>

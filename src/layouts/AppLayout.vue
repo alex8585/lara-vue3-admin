@@ -25,10 +25,11 @@ const icons = {
   Tags: "local_offer",
 };
 
-const { isLoged } = useAuth();
+const { getUser } = useAuth();
 
-onMounted(() => {
-  if (!isLoged.value) {
+onMounted(async () => {
+  let user = await getUser();
+  if (!user) {
     router.push("/login");
   }
 });
@@ -54,7 +55,13 @@ function isCurrentUrl(url: "string") {
         <q-toolbar-title> Admin panel </q-toolbar-title>
         <div class="q-pa-md">
           <q-btn-dropdown color="primary" label="Account">
-            <q-list> </q-list>
+            <q-list>
+              <RouterLink class="flex items-center" to="/logout">
+                <q-item>
+                  <q-item-section> Logout </q-item-section>
+                </q-item>
+              </RouterLink>
+            </q-list>
           </q-btn-dropdown>
         </div>
       </q-toolbar>

@@ -14,17 +14,17 @@ const form = ref(initForm);
 const router = useRouter();
 function setErrors(err: {}) {
   errors.value = { ...err };
-  console.log(errors);
 }
 
 function reset() {
   form.value = {};
   errors.value = {};
 }
-const { isLoged, login } = useAuth();
+const { login, getUser } = useAuth();
 
-onMounted(() => {
-  if (isLoged.value) {
+onMounted(async () => {
+  let user = await getUser();
+  if (user) {
     router.push("/");
   }
 });

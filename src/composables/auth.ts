@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 
 import axiosClient from "@/support/axiosClient";
 
@@ -7,6 +7,7 @@ export default function useAuth() {
   const isLoged = ref(false);
 
   const url = "/api/v1/auth";
+
   const login = async (email: string, password: string) => {
     const result: { error?: boolean; msg?: string | {}; token?: string } = {};
 
@@ -61,20 +62,39 @@ export default function useAuth() {
     return localStorage.getItem("token");
   }
 
-  async function getUser() {
-    const resp = await axiosClient.get(`${url}/me`);
-    return resp.data;
+  async function logout() {
+    try {
+      const resp = await axiosClient.post(`${url}/logout`);
+      console.log(resp.data);
+      isLoged.value = false;
+      localStorage.removeItem("token");
+      user.value = null;
+    } catch (error: any) {
+      console.log(error.response.data.message);
+    }
   }
 
-  onMounted(async () => {
+  async function getUser() {
     const token = getToken();
     if (!token) {
       isLoged.value = false;
-    } else {
-      isLoged.value = true;
-      user.value = await getUser();
+      user.value = null;
+      return null;
     }
-  });
+    try {
+      const resp = await axiosClient.get(`${url}/me`);
+      isLoged.value = true;
+      user.value = resp.data;
+      return user.value;
+    } catch (error: any) {
+      isLoged.value = false;
+      localStorage.removeItem("token");
+      console.log(error.response.data.message);
+      return null;
+    }
+  }
 
-  return { isLoged, user, login, register };
+  //  onMounted(async () => {});
+
+  return { logout, isLoged, user, getUser, login, register };
 }

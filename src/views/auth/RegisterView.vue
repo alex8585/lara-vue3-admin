@@ -9,15 +9,16 @@ const initForm = {
   password: null,
 };
 
-const { isLoged, register } = useAuth();
+const { getUser, register } = useAuth();
 const form = ref(initForm);
 const router = useRouter();
 function setErrors(err: {}) {
   errors.value = { ...err };
 }
 
-onMounted(() => {
-  if (isLoged.value) {
+onMounted(async () => {
+  let user = await getUser();
+  if (user) {
     router.push("/");
   }
 });

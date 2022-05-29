@@ -23,6 +23,10 @@ export default function useEditRecord(tableRef: Ref, url: string) {
         editDialRef.value.hide();
       })
       .catch(function (error) {
+        if (error.response.status == 403) {
+          editDialRef.value.setErrors({ global: "Unauthorized action." });
+        }
+
         if (error.response.data.errors) {
           editDialRef.value.setErrors(error.response.data.errors);
         }

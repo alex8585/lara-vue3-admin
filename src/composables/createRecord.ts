@@ -21,6 +21,9 @@ export default function useCreateRecord(tableRef: Ref, url: string) {
         createDialRef.value.hide();
       })
       .catch(function (error) {
+        if (error.response.status == 403) {
+          createDialRef.value.setErrors({ global: "Unauthorized action." });
+        }
         if (error.response.data.errors) {
           createDialRef.value.setErrors(error.response.data.errors);
         }

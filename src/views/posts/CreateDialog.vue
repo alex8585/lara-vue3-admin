@@ -3,6 +3,7 @@ import { ref, onMounted, onUpdated } from "vue";
 import type { OptionType, PostForm, TagType } from "@/types/data-table";
 import { useTagsStore } from "@/stores/tags";
 import { useCategoriesStore } from "@/stores/categories";
+import ErrorMsg from "@/components/ErrorMsg.vue";
 
 const tags = useTagsStore();
 const cats = useCategoriesStore();
@@ -105,6 +106,7 @@ defineExpose({
       </q-card-section>
       <q-separator inset />
       <q-card-section class="q-pt-none">
+        <ErrorMsg :error="errors.global" />
         <q-form class="q-gutter-md">
           <q-list>
             <q-item>

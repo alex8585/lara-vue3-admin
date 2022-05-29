@@ -2,15 +2,17 @@
 import { usePostsStore } from "@/stores/posts";
 import { shorten } from "@/support/helpers";
 import type { Col } from "@/types/data-table";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import usePagination from "@/composables/pagination";
 import useCreateRecord from "@/composables/createRecord";
 import useEditRecord from "@/composables/editRecord";
-import useDeleteRecord from "@/composables/deleteRecord";
 import CreateDialog from "./CreateDialog.vue";
 import EditDialog from "./EditDialog.vue";
+import DeleteDialog from "@/components/DeleteDialog.vue";
 const posts = usePostsStore();
 const tableRef = ref();
+const deleteDialogRef = ref();
+
 const url = import.meta.env.VITE_API_URL + "/api/v1/posts";
 
 const { pagination, onRequest, loading, onFilterSend } = usePagination(
@@ -18,7 +20,6 @@ const { pagination, onRequest, loading, onFilterSend } = usePagination(
   tableRef
 );
 const { editDialRef, editRow, editSendHandler } = useEditRecord(tableRef, url);
-const { deleteConfirm } = useDeleteRecord(tableRef, url);
 const { createDialRef, createDialog, createSendHandler } = useCreateRecord(
   tableRef,
   url
@@ -51,9 +52,9 @@ const columns: Array<Col> = [
   },
 ];
 
-onMounted(async () => {
-  //await cats.getAllCategories();
-});
+function onDeletedHandler() {
+  tableRef.value.requestServerInteraction();
+}
 </script>
 
 <template>
@@ -114,13 +115,20 @@ onMounted(async () => {
             flat
             color="grey"
             icon="delete"
-            @click="deleteConfirm(params)"
+            @click="
+              deleteDialogRef.deleteConfirm(params.row.id, params.row.title)
+            "
           />
         </q-td>
       </template>
     </q-table>
     <CreateDialog ref="createDialRef" @send="createSendHandler" />
     <EditDialog ref="editDialRef" @send="editSendHandler" />
+    <DeleteDialog
+      :url="url"
+      ref="deleteDialogRef"
+      @deleted="onDeletedHandler"
+    />
   </app-layout>
 </template>
 

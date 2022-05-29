@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import type { TagRowFormType } from "@/types/data-table";
 
+import ErrorMsg from "@/components/ErrorMsg.vue";
 const props = defineProps({
   initValues: {
     default: () => [],
@@ -71,6 +72,8 @@ defineExpose({
       </q-card-section>
       <q-separator inset />
       <q-card-section class="q-pt-none">
+        <ErrorMsg :error="errors.global" />
+
         <q-form class="q-gutter-md">
           <q-list>
             <q-item>

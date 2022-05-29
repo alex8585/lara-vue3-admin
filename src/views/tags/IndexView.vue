@@ -6,12 +6,15 @@ import { ref } from "vue";
 import usePagination from "@/composables/pagination";
 import useCreateRecord from "@/composables/createRecord";
 import useEditRecord from "@/composables/editRecord";
-import useDeleteRecord from "@/composables/deleteRecord";
 
 import CreateDialog from "./CreateDialog.vue";
 import EditDialog from "./EditDialog.vue";
+import DeleteDialog from "@/components/DeleteDialog.vue";
+
 const tags = useTagsStore();
 const tableRef = ref();
+const deleteDialogRef = ref();
+
 const url = import.meta.env.VITE_API_URL + "/api/v1/tags";
 
 const { pagination, onRequest, loading, onFilterSend } = usePagination(
@@ -19,7 +22,6 @@ const { pagination, onRequest, loading, onFilterSend } = usePagination(
   tableRef
 );
 const { editDialRef, editRow, editSendHandler } = useEditRecord(tableRef, url);
-const { deleteConfirm } = useDeleteRecord(tableRef, url);
 const { createDialRef, createDialog, createSendHandler } = useCreateRecord(
   tableRef,
   url
@@ -51,6 +53,10 @@ const columns: Array<Col> = [
     align: "center",
   },
 ];
+
+function onDeletedHandler() {
+  tableRef.value.requestServerInteraction();
+}
 </script>
 
 <template>
@@ -111,13 +117,20 @@ const columns: Array<Col> = [
             flat
             color="grey"
             icon="delete"
-            @click="deleteConfirm(params)"
+            @click="
+              deleteDialogRef.deleteConfirm(params.row.id, params.row.name)
+            "
           />
         </q-td>
       </template>
     </q-table>
     <CreateDialog ref="createDialRef" @send="createSendHandler" />
     <EditDialog ref="editDialRef" @send="editSendHandler" />
+    <DeleteDialog
+      :url="url"
+      ref="deleteDialogRef"
+      @deleted="onDeletedHandler"
+    />
   </app-layout>
 </template>
 

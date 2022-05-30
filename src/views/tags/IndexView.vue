@@ -11,23 +11,22 @@ import CreateDialog from "./CreateDialog.vue";
 import EditDialog from "./EditDialog.vue";
 import DeleteDialog from "@/components/DeleteDialog.vue";
 
+import useAddActionsColumn from "@/composables/actionsColumn";
 const tags = useTagsStore();
 const tableRef = ref();
 const deleteDialogRef = ref();
 
 const url = import.meta.env.VITE_API_URL + "/api/v1/tags";
 
-const { pagination, onRequest, loading, onFilterSend } = usePagination(
-  tags,
-  tableRef
-);
+const { meta, pagination, onRequest, loading, onFilterSend } =
+  await usePagination(tags, tableRef);
 const { editDialRef, editRow, editSendHandler } = useEditRecord(tableRef, url);
 const { createDialRef, createDialog, createSendHandler } = useCreateRecord(
   tableRef,
   url
 );
 
-const columns: Array<Col> = [
+const columns = ref<Array<Col>>([
   {
     name: "id",
     required: true,
@@ -45,14 +44,9 @@ const columns: Array<Col> = [
     format: (val: "string") => shorten(val, 3, ""),
     sortable: true,
   },
-  {
-    name: "actions",
-    sortable: false,
-    label: "Actions",
-    field: "",
-    align: "center",
-  },
-];
+]);
+
+useAddActionsColumn(columns, meta);
 
 function onDeletedHandler() {
   tableRef.value.requestServerInteraction();
@@ -79,7 +73,12 @@ function onDeletedHandler() {
         </div>
 
         <div class="q-pa-md text-right">
-          <q-btn color="primary" label="Create" @click="createDialog" />
+          <q-btn
+            v-if="meta.can_create"
+            color="primary"
+            label="Create"
+            @click="createDialog"
+          />
         </div>
       </div>
     </div>
@@ -104,6 +103,7 @@ function onDeletedHandler() {
       <template #body-cell-actions="params">
         <q-td :props="params">
           <q-btn
+            v-if="meta.can_update"
             dense
             round
             flat
@@ -112,6 +112,7 @@ function onDeletedHandler() {
             @click="editRow(params)"
           />
           <q-btn
+            v-if="meta.can_delete"
             dense
             round
             flat

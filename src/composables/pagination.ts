@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 
 import type { Ref } from "vue";
 interface PaginationProos {
@@ -10,7 +10,7 @@ interface PaginationProos {
   };
 }
 
-export default function usePagination(
+export default async function usePagination(
   items: any,
   tableRef: Ref,
   defaultPerPage = 5
@@ -18,6 +18,7 @@ export default function usePagination(
   const loading = ref(false);
   const filter = ref({});
 
+  const meta = ref<any>({});
   const pagination = ref({
     sortBy: "id",
     descending: true,
@@ -26,10 +27,12 @@ export default function usePagination(
     rowsNumber: items.meta.rowsNumber,
   });
 
-  onMounted(async () => {
+  async function fetchItems() {
     await items.fetchItems(1, defaultPerPage);
     pagination.value.rowsNumber = items.meta.rowsNumber;
-  });
+    meta.value = { ...items.meta };
+  }
+  await fetchItems();
 
   async function onRequest(props: PaginationProos) {
     loading.value = true;
@@ -49,6 +52,9 @@ export default function usePagination(
     pagination.value.descending = descending;
     pagination.value.rowsPerPage = rowsPerPage;
     pagination.value.rowsNumber = items.meta.rowsNumber;
+
+    meta.value = { ...items.meta };
+
     loading.value = false;
   }
   function onFilterSend(form: any) {
@@ -57,5 +63,12 @@ export default function usePagination(
     tableRef.value.requestServerInteraction();
   }
 
-  return { pagination, onRequest, loading, filter, onFilterSend };
+  return {
+    meta,
+    pagination,
+    onRequest,
+    loading,
+    filter,
+    onFilterSend,
+  };
 }

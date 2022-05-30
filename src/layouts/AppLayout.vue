@@ -23,6 +23,7 @@ const icons = {
   Categories: "collections",
   Posts: "library_books",
   Tags: "local_offer",
+  Users: "group",
 };
 
 const { getUser } = useAuth();

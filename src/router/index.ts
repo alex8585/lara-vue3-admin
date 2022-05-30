@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "../views/DashboardView.vue";
 import CategoriesView from "../views/categories/IndexView.vue";
 import TagsView from "../views/tags/IndexView.vue";
+import UsersView from "../views/users/IndexView.vue";
 import PostsView from "../views/posts/IndexView.vue";
 import RegisterView from "@/views/auth/RegisterView.vue";
 import LoginView from "@/views/auth/LoginView.vue";
@@ -47,6 +48,12 @@ const router = createRouter({
       name: "Logout",
       component: LogoutView,
     },
+    {
+      path: "/users",
+      name: "Users",
+      component: UsersView,
+    },
+
     // {
     //   path: "/about",
     //   name: "about",

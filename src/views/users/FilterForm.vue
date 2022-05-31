@@ -1,3 +1,23 @@
+<script lang="ts" setup>
+import { ref } from "vue";
+const initVal = {
+  name: "",
+  id: "",
+  email: "",
+};
+const form = ref({ ...initVal });
+
+const emit = defineEmits(["send"]);
+
+function onReset() {
+  form.value = { ...initVal };
+  emit("send", form);
+}
+function onSend() {
+  emit("send", form);
+}
+</script>
+
 <template>
   <q-expansion-item
     class="shadow-1 overflow-hidden"
@@ -23,6 +43,12 @@
             </q-item-section>
           </q-item>
 
+          <q-item>
+            <q-item-section>
+              <q-item-label class="q-pb-xs"> Email </q-item-label>
+              <q-input v-model="form.email" filled />
+            </q-item-section>
+          </q-item>
           <q-card-section>
             <q-card-actions align="right">
               <q-btn flat label="Reset" color="primary" @click="onReset" />
@@ -34,22 +60,3 @@
     </q-card>
   </q-expansion-item>
 </template>
-
-<script lang="ts" setup>
-import { ref } from "vue";
-const initVal = {
-  name: "",
-  id: "",
-};
-const form = ref({ ...initVal });
-
-const emit = defineEmits(["send"]);
-
-function onReset() {
-  form.value = { ...initVal };
-  emit("send", form);
-}
-function onSend() {
-  emit("send", form);
-}
-</script>

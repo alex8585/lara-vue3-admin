@@ -1,10 +1,11 @@
 import type { Ref } from "vue";
-import { onMounted } from "vue";
+import { computed } from "vue";
 
-export default function useAddActionsColumn(columns: Ref, meta: Ref) {
-  onMounted(async () => {
+export default function useAddActionsColumn(cols: any, meta: Ref) {
+  const columns = computed(() => {
+    const columns = [...cols];
     if (meta.value.can_update || meta.value.can_delete) {
-      columns.value.push({
+      columns.push({
         name: "actions",
         sortable: false,
         label: "Actions",
@@ -12,5 +13,8 @@ export default function useAddActionsColumn(columns: Ref, meta: Ref) {
         align: "center",
       });
     }
+    return columns;
   });
+
+  return columns;
 }

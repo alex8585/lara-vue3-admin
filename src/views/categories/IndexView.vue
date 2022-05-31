@@ -26,7 +26,7 @@ const { createDialRef, createDialog, createSendHandler } = useCreateRecord(
   url
 );
 
-const columns = ref<Array<Col>>([
+const cols: Array<Col> = [
   {
     name: "id",
     required: true,
@@ -44,9 +44,9 @@ const columns = ref<Array<Col>>([
     format: (val: "string") => shorten(val, 3, ""),
     sortable: true,
   },
-]);
+];
 
-useAddActionsColumn(columns, meta);
+let columns = useAddActionsColumn(cols, meta);
 
 function onDeletedHandler() {
   tableRef.value.requestServerInteraction();

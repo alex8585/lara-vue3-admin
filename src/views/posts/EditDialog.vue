@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import type { OptionType, PostForm, TagType } from "@/types/data-table";
 
 import { useTagsStore } from "@/stores/tags";
@@ -8,9 +8,6 @@ import { useCategoriesStore } from "@/stores/categories";
 import ErrorMsg from "@/components/ErrorMsg.vue";
 const tags = useTagsStore();
 const cats = useCategoriesStore();
-let tagsOptions: Array<OptionType> = [];
-let catsOptions: Array<OptionType> = [];
-
 const props = defineProps({
   initValues: {
     default: () => [],
@@ -43,26 +40,32 @@ function onSend() {
   emit("send", form);
 }
 
-onMounted(async () => {
-  await tags.getAllTags();
-  await cats.getAllCategories();
-
+let tagsOptions = computed(() => {
+  let options = [];
   for (const tag of [...tags.allTags] as Array<TagType>) {
     let option = {
       label: tag.name,
       value: tag.id,
     };
-    tagsOptions.push(option);
+    options.push(option);
   }
+  return options;
+});
 
-  catsOptions.push({ label: "Default", value: null });
+let catsOptions = computed(() => {
+  let options = [];
+  options.push({ label: "Default", value: null });
   for (const cat of [...cats.allCats] as Array<TagType>) {
     let option = {
       label: cat.name,
       value: cat.id,
     };
-    catsOptions.push(option);
+    options.push(option);
   }
+  return options;
+});
+
+onMounted(async () => {
   isShow.value = props.show;
   emit("mount");
 });

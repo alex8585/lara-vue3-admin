@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 import type { Ref } from "vue";
 interface PaginationProos {
@@ -32,7 +32,9 @@ export default async function usePagination(
     pagination.value.rowsNumber = items.meta.rowsNumber;
     meta.value = { ...items.meta };
   }
-  await fetchItems();
+  onMounted(async () => {
+    await fetchItems();
+  });
 
   async function onRequest(props: PaginationProos) {
     loading.value = true;

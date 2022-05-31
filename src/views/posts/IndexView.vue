@@ -2,15 +2,18 @@
 import { usePostsStore } from "@/stores/posts";
 import { shorten } from "@/support/helpers";
 import type { Col } from "@/types/data-table";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import usePagination from "@/composables/pagination";
 import useCreateRecord from "@/composables/createRecord";
 import useEditRecord from "@/composables/editRecord";
 import CreateDialog from "./CreateDialog.vue";
 import EditDialog from "./EditDialog.vue";
+import FilterForm from "./FilterForm.vue";
 import DeleteDialog from "@/components/DeleteDialog.vue";
 import useAddActionsColumn from "@/composables/actionsColumn";
 
+import { useTagsStore } from "@/stores/tags";
+import { useCategoriesStore } from "@/stores/categories";
 const posts = usePostsStore();
 const tableRef = ref();
 const deleteDialogRef = ref();
@@ -24,7 +27,7 @@ const { createDialRef, createDialog, createSendHandler } = useCreateRecord(
   url
 );
 
-const columns = ref<Array<Col>>([
+const cols: Array<Col> = [
   {
     name: "id",
     required: true,
@@ -42,9 +45,15 @@ const columns = ref<Array<Col>>([
     format: (val: "string") => shorten(val, 3, ""),
     sortable: true,
   },
-]);
+];
 
-useAddActionsColumn(columns, meta);
+const tags = useTagsStore();
+const cats = useCategoriesStore();
+onMounted(async () => {
+  await tags.getAllTags();
+  await cats.getAllCategories();
+});
+let columns = useAddActionsColumn(cols, meta);
 
 function onDeletedHandler() {
   tableRef.value.requestServerInteraction();

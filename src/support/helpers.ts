@@ -29,7 +29,15 @@ export function filterArrToFilterStr(filter: any) {
     const filterObj = filter.value;
     if (filterObj) {
       for (const prop in filterObj) {
-        const val = filterObj[prop];
+        let val = filterObj[prop];
+        if (val.value || val.label) {
+          val = val.value;
+        } else if (typeof val === "object") {
+          const vals = [...val].map((e) => {
+            return e.value;
+          });
+          val = vals.join(",");
+        }
         filterStr += `&filter[${prop}]=${val}`;
       }
     }

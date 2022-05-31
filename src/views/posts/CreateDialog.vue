@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import type { OptionType, PostForm, TagType } from "@/types/data-table";
+import { ref, onMounted, computed } from "vue";
+import type { PostForm, TagType } from "@/types/data-table";
 import { useTagsStore } from "@/stores/tags";
 import { useCategoriesStore } from "@/stores/categories";
 import ErrorMsg from "@/components/ErrorMsg.vue";
@@ -22,8 +22,8 @@ const props = defineProps({
 
 const emit = defineEmits(["change", "mount", "send"]);
 
-let tagOptions: Array<OptionType> = [];
-let catsOptions: Array<OptionType> = [];
+//let tagOptions: Array<OptionType> = [];
+//let catsOptions: Array<OptionType> = [];
 
 const dialogRef = ref();
 const isShow = ref(false);
@@ -42,25 +42,35 @@ function onSend() {
   emit("send", form);
 }
 
-onMounted(async () => {
-  await tags.getAllTags();
-  await cats.getAllCategories();
-
+let tagOptions = computed(() => {
+  let options = [];
   for (const tag of [...tags.allTags] as Array<TagType>) {
     let option = {
       label: tag.name,
       value: tag.id,
     };
-    tagOptions.push(option);
+    options.push(option);
   }
-  catsOptions.push({ label: "Default", value: null });
+  return options;
+});
+
+let catsOptions = computed(() => {
+  let options = [];
+  options.push({ label: "Default", value: null });
   for (const cat of [...cats.allCats] as Array<TagType>) {
     let option = {
       label: cat.name,
       value: cat.id,
     };
-    catsOptions.push(option);
+    options.push(option);
   }
+  return options;
+});
+
+onMounted(async () => {
+  //  await tags.getAllTags();
+  //  await cats.getAllCategories();
+
   isShow.value = props.show;
   emit("mount");
 });

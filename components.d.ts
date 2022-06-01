@@ -5,6 +5,7 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AdminTable: typeof import('./src/components/AdminTable.vue')['default']
     AppLayout: typeof import('./src/layouts/AppLayout.vue')['default']
     AuthLayout: typeof import('./src/layouts/AuthLayout.vue')['default']
     CategoriesView: typeof import('./src/views/CategoriesView.vue')['default']

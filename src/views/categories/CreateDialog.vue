@@ -80,6 +80,7 @@ defineExpose({
               <q-item-section>
                 <q-item-label class="q-pb-xs"> Name </q-item-label>
                 <q-input
+                  name="name"
                   v-model="form.name"
                   :error-message="errors.name ? errors.name[0] : ''"
                   :error="!!errors.name"

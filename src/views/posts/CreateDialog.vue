@@ -120,6 +120,7 @@ defineExpose({
               <q-item-section>
                 <q-item-label class="q-pb-xs"> Title </q-item-label>
                 <q-input
+                  name="title"
                   v-model="form.title"
                   :error-message="errors.title ? errors.title[0] : ''"
                   :error="!!errors.title"
@@ -131,6 +132,7 @@ defineExpose({
               <q-item-section>
                 <q-item-label class="q-pb-xs"> Description </q-item-label>
                 <q-input
+                  name="description"
                   v-model="form.description"
                   :error-message="
                     errors.description ? errors.description[0] : ''
@@ -144,6 +146,7 @@ defineExpose({
               <q-item-section>
                 <q-select
                   v-model="form.tags"
+                  name="tags"
                   filled
                   multiple
                   :options="tagOptions"
@@ -153,6 +156,7 @@ defineExpose({
               </q-item-section>
               <q-item-section>
                 <q-select
+                  name="category"
                   v-model="form.category"
                   filled
                   :options="catsOptions"

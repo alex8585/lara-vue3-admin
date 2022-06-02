@@ -82,6 +82,7 @@ defineExpose({
               <q-item-section>
                 <q-item-label class="q-pb-xs"> Name </q-item-label>
                 <q-input
+                  name="name"
                   v-model="form.name"
                   :error-message="errors.name ? errors.name[0] : ''"
                   :error="!!errors.name"
@@ -93,6 +94,7 @@ defineExpose({
               <q-item-section>
                 <q-item-label class="q-pb-xs"> Email </q-item-label>
                 <q-input
+                  name="email"
                   v-model="form.email"
                   :error-message="errors.email ? errors.email[0] : ''"
                   :error="!!errors.email"
@@ -106,6 +108,7 @@ defineExpose({
                 <q-item-label class="q-pb-xs"> Password </q-item-label>
                 <q-input
                   type="password"
+                  name="password"
                   v-model="form.password"
                   :error-message="errors.password ? errors.password[0] : ''"
                   :error="!!errors.password"

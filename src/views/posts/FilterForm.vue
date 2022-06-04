@@ -66,6 +66,16 @@ function onSend() {
         <q-list>
           <q-item>
             <q-item-section>
+              <q-input v-model="form.q" label="Search">
+                <template #append>
+                  <q-icon name="search" class="cursor-pointer" />
+                </template>
+              </q-input>
+            </q-item-section>
+          </q-item>
+
+          <q-item>
+            <q-item-section>
               <q-item-label class="q-pb-xs"> ID </q-item-label>
               <q-input v-model="form.id" filled />
             </q-item-section>
@@ -107,6 +117,7 @@ function onSend() {
               />
             </q-item-section>
           </q-item>
+
           <q-card-section>
             <q-card-actions align="right">
               <q-btn flat label="Reset" color="primary" @click="onReset" />
@@ -115,6 +126,7 @@ function onSend() {
           </q-card-section>
         </q-list>
       </q-form>
+      <div></div>
     </q-card>
   </q-expansion-item>
 </template>

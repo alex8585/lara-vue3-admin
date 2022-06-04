@@ -40,7 +40,7 @@ let cols = useAddActionsColumn(props.columns, meta);
 <template>
   <div class="flex justify-between mb-5">
     <div class="" style="width: 350px">
-      <FilterForm @send="onFilterSend" />
+      <component :is="FilterForm" @send="onFilterSend" />
     </div>
     <div class="">
       <q-btn

@@ -5,9 +5,18 @@ import { ref } from "vue";
 const message = ref();
 window.Pusher = Pusher;
 
+const token = localStorage.getItem("token");
+const authHost = import.meta.env.VITE_PUSHER_HOST;
+
 const echo = new Echo({
+  authEndpoint: `${authHost}broadcasting/auth`,
+  auth: {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  },
   broadcaster: "pusher",
-  key: "app",
+  key: import.meta.env.VITE_PUSHER_KEY,
   wsHost: window.location.hostname,
   wsPort: 6001,
   forceTLS: false,
@@ -15,7 +24,7 @@ const echo = new Echo({
 });
 
 echo
-  .channel("message.dashboard")
+  .channel("private-message.dashboard")
   .listen("FrontendMessage", function (data: any) {
     message.value = data.msg.text;
     console.log(data);

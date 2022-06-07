@@ -13,6 +13,7 @@ const initVal = {
   description: "",
   tags: [],
   category: { label: "Default", value: "" },
+  q: "",
 };
 const form = ref({ ...initVal });
 

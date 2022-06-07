@@ -20,7 +20,7 @@ export default defineConfig({
       sassVariables: "src/quasar-variables.sass",
     }),
     components({
-      dirs: ["src/views", "src/base", "src/components", "src/layouts"],
+      dirs: ["src/base", "src/components", "src/layouts"],
       dts: true,
     }),
   ],

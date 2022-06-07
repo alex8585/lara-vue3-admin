@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import type { OptionType, PostForm, TagType } from "@/types/data-table";
 
 import ErrorMsg from "@/components/ErrorMsg.vue";
 

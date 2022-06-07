@@ -12,7 +12,7 @@ export default function useCreateRecord(tableRef: Ref, url: string) {
 
   function createSendHandler(form: any) {
     axiosClient
-      .post(`${url}/`, form.value)
+      .post(url, form.value)
       .then(function (res) {
         const msg = res.data.message;
         console.log(msg);

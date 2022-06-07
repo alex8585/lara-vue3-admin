@@ -17,6 +17,7 @@ export default function useEditRecord(tableRef: Ref, url: string) {
       .post(`${url}/${form.value.id}`, form.value)
       .then(function (res) {
         const msg = res.data.message;
+        console.log(msg);
         tableRef.value.requestServerInteraction();
         editDialRef.value.reset();
         editDialRef.value.hide();

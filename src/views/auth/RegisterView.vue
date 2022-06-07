@@ -4,13 +4,17 @@ import { useRouter } from "vue-router";
 
 import useAuth from "@/composables/auth";
 const errors = ref<any>({});
-const initForm = {
-  email: null,
-  password: null,
+interface InitForm {
+  email: string;
+  password: string;
+}
+const initForm: InitForm = {
+  email: "",
+  password: "",
 };
 
 const { getUser, register } = useAuth();
-const form = ref(initForm);
+const form = ref<InitForm>(initForm);
 const router = useRouter();
 function setErrors(err: {}) {
   errors.value = { ...err };
@@ -24,9 +28,13 @@ onMounted(async () => {
 });
 
 async function regSendHandler() {
-  const res = await register(form.value.email, form.value.password);
+  const email = form.value.email ?? "";
+  const password = form.value.password ?? "";
+  const res = await register(email, password);
   if (res.error) {
-    setErrors(res.msg);
+    if (res.msg) {
+      setErrors(res.msg);
+    }
   } else {
     router.push("/");
   }

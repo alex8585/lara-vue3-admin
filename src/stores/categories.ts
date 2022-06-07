@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
-import { filterArrToFilterStr } from "@/support/helpers";
-import axiosClient from "@/support/axiosClient";
 
+import { fetchAll, fetchMany } from "@/support/query";
 const url = "/api/v1/categories";
 
 interface Category {
@@ -49,29 +48,18 @@ export const useCategoriesStore = defineStore({
   },
 
   actions: {
-    async getAllCategories() {
-      const catsUrl = `${url}?perPage=-1`;
-      const res = await axiosClient.get<any>(catsUrl);
-      this._allCategories = res.data;
-    },
-
-    async fetchItems(
-      page = 1,
-      perPage = 5,
-      orderBy = "id",
-      descending = true,
-      filter: any
-    ) {
+    async fetchItems(...rest: [number, number, string, boolean, any]) {
       this._loading = true;
-      const filterStr = filterArrToFilterStr(filter);
-      let tagsUrl = `${url}/?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
-
-      if (filterStr) {
-        tagsUrl = `${tagsUrl}${filterStr}`;
-      }
-      const res = await axiosClient.get<any>(tagsUrl);
+      const res = await fetchMany(url, ...rest);
       this.categories.data = res.data.data;
       this.categories.meta = res.data.metaData;
+      this._loading = false;
+    },
+
+    async getAllCategories() {
+      this._loading = true;
+      const res = await fetchAll(url);
+      this._allCategories = res.data;
       this._loading = false;
     },
   },

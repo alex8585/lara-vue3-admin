@@ -5,8 +5,8 @@ import useAuth from "@/composables/auth";
 
 const errors = ref<any>({});
 const initForm = {
-  email: null,
-  password: null,
+  email: "",
+  password: "",
 };
 
 //const url = "/api/v1/auth/login";
@@ -16,10 +16,6 @@ function setErrors(err: {}) {
   errors.value = { ...err };
 }
 
-function reset() {
-  form.value = {};
-  errors.value = {};
-}
 const { login, getUser } = useAuth();
 
 onMounted(async () => {
@@ -32,7 +28,9 @@ onMounted(async () => {
 async function loginSendHandler() {
   const res = await login(form.value.email, form.value.password);
   if (res.error) {
-    setErrors(res.msg);
+    if (res.msg) {
+      setErrors(res.msg);
+    }
   } else {
     router.push("/");
   }

@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
-import { filterArrToFilterStr } from "@/support/helpers";
-// import axios from "axios";
-import axiosClient from "@/support/axiosClient";
 
+import { fetchMany } from "@/support/query";
 const url = "/api/v1/posts";
 interface Post {
   id?: number;
@@ -46,21 +44,9 @@ export const usePostsStore = defineStore({
   },
 
   actions: {
-    async fetchItems(
-      page = 1,
-      perPage = 5,
-      orderBy = "id",
-      descending = true,
-      filter: any
-    ) {
+    async fetchItems(...rest: [number, number, string, boolean, any]) {
       this._loading = true;
-      const filterStr = filterArrToFilterStr(filter);
-      let itemsUrl = `${url}/?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
-
-      if (filterStr) {
-        itemsUrl = `${itemsUrl}${filterStr}`;
-      }
-      const res = await axiosClient.get<any>(itemsUrl);
+      const res = await fetchMany(url, ...rest);
       this.posts.data = res.data.data;
       this.posts.meta = res.data.metaData;
       this._loading = false;

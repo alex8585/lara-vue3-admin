@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
-import { filterArrToFilterStr } from "@/support/helpers";
-import axiosClient from "@/support/axiosClient";
 const url = "/api/v1/tags";
-
+import { fetchAll, fetchMany, fetchUrl } from "@/support/query";
 interface Tag {
   id?: number;
   name?: string;
@@ -50,36 +48,23 @@ export const useTagsStore = defineStore({
   actions: {
     async getAllTags() {
       this._loading = true;
-      const tagsUrl = `${url}?perPage=-1`;
-      const res = await axiosClient.get<any>(tagsUrl);
+      const res = await fetchAll(url);
       this._allTags = [...res.data];
       this._loading = false;
     },
 
-    async fetchItems(
-      page = 1,
-      perPage = 5,
-      orderBy = "id",
-      descending = true,
-      filter: any
-    ) {
+    async fetchItems(...rest: [number, number, string, boolean, any]) {
       this._loading = true;
-      const filterStr = filterArrToFilterStr(filter);
-      let tagsUrl = `${url}/?page=${page}&perPage=${perPage}&orderBy=${orderBy}&descending=${descending}`;
-
-      if (filterStr) {
-        tagsUrl = `${tagsUrl}${filterStr}`;
-      }
-      const res = await axiosClient.get<any>(tagsUrl);
+      const res = await fetchMany(url, ...rest);
       this.tags.data = res.data.data;
       this.tags.meta = res.data.metaData;
       this._loading = false;
     },
+
     async fetchTag(id: number) {
       this._loading = true;
-      const res = await axiosClient.get<Tag>(`${url}/tags/${id}`);
-      const data = res.data as Tag;
-      this.tag = data;
+      const res = await fetchUrl(`${url}/tags/${id}`);
+      this.tag = res.data;
       this._loading = false;
     },
   },

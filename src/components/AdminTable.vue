@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Ref } from "vue";
 import { ref } from "vue";
 import usePagination from "@/composables/pagination";
 
@@ -8,9 +7,10 @@ import useEditRecord from "@/composables/editRecord";
 import useAddActionsColumn from "@/composables/actionsColumn";
 import DeleteDialog from "@/components/DeleteDialog.vue";
 
+import type { Col } from "@/types/data-table";
 const props = defineProps<{
   tableName: string;
-  columns: Array;
+  columns: Array<Col>;
   items: any;
   url: string;
   CreateDialog: any;

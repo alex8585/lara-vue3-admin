@@ -2,7 +2,7 @@
 import { usePostsStore } from "@/stores/posts";
 import { shorten } from "@/support/helpers";
 import type { Col } from "@/types/data-table";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import CreateDialog from "./CreateDialog.vue";
 import EditDialog from "./EditDialog.vue";
 import FilterForm from "./FilterForm.vue";

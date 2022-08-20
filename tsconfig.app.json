@@ -4,8 +4,8 @@
   "exclude": ["src/**/__tests__/*"],
   "isolatedModules": true,
   "compilerOptions": {
-       "allowJs": true,
-       "types": ["vitest/globals"],
+    "allowJs": true,
+    "types": ["vitest/globals"],
     "composite": true,
     "baseUrl": ".",
     "paths": {

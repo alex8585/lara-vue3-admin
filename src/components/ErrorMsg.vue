@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 defineProps<{
-  error?: Object | null;
+  error?: Record<string, any> | null;
 }>();
 </script>
 <template>

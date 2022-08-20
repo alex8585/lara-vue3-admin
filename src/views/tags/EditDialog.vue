@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import type { TagForm } from "@/types/data-table";
 
-import { getLocales, getLocalesFields } from "@/support/helpers";
+import { localeField, getLocales, getLocalesFields } from "@/support/helpers";
 import ErrorMsg from "@/components/ErrorMsg.vue";
 const props = defineProps({
   initValues: {
@@ -62,9 +62,6 @@ function show() {
 
 function setErrors(err: {}) {
   errors.value = { ...err };
-}
-function localeField(locale, name) {
-  return `${locale}_${name}`;
 }
 
 defineExpose({
@@ -134,4 +131,3 @@ defineExpose({
   text-align: center;
 }
 </style>
-

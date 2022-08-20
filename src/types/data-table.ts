@@ -66,12 +66,11 @@ export interface PortfolioRowFormType {
 
 export interface TagForm {
   id?: number | null;
-  name: string | null;
   _method?: string;
 }
+
 export interface CategoryForm {
   id?: number | null;
-  name: string | null;
   _method?: string;
 }
 export interface PostForm {

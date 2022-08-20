@@ -1,5 +1,9 @@
 import Cookies from "js-cookie";
 
+export function localeField(locale: string, name: string) {
+  return `${locale}_${name}`;
+}
+
 export function getLocales() {
   return ["en", "uk", "ru"];
 }

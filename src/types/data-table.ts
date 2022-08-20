@@ -75,8 +75,6 @@ export interface CategoryForm {
 }
 export interface PostForm {
   id?: number | null;
-  title: string | null;
-  description: string | null;
   _method?: string;
   tags: OptionType[];
   category?: {} | null;

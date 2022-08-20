@@ -4,7 +4,7 @@ import type { OptionType, PostForm, TagType } from "@/types/data-table";
 
 import { useTagsStore } from "@/stores/tags";
 import { useCategoriesStore } from "@/stores/categories";
-
+import { localeField, getLocales, getLocalesFields } from "@/support/helpers";
 import ErrorMsg from "@/components/ErrorMsg.vue";
 const tags = useTagsStore();
 const cats = useCategoriesStore();
@@ -21,18 +21,21 @@ const props = defineProps({
 
 const emit = defineEmits(["change", "mount", "send"]);
 
+const locales = getLocales();
+const localesOptions = locales.map((e) => ({ label: e, value: e }));
+const selectedLang = ref("en");
 const isShow = ref(false);
 
+const dialogRef = ref();
+const initFormTransFilds = getLocalesFields(["title", "description"]);
 const initForm = {
+  ...initFormTransFilds,
   _method: "PUT",
   id: null,
-  title: null,
-  description: null,
   tags: [],
   category: { label: "Default", value: null },
 };
 
-const dialogRef = ref();
 const form = ref<PostForm>(initForm);
 
 const errors = ref<any>({});
@@ -99,6 +102,7 @@ function reset() {
 }
 
 function show() {
+  selectedLang.value = "en";
   isShow.value = true;
 }
 
@@ -132,35 +136,53 @@ defineExpose({
       </q-card-section>
       <q-separator inset />
       <q-card-section class="q-pt-none">
-        <ErrorMsg :error="errors.global" />
+        <ErrorMsg :error="errors" />
+        <div class="togle-wrapp">
+          <q-btn-toggle
+            v-model="selectedLang"
+            push
+            glossy
+            toggle-color="primary"
+            :options="localesOptions"
+          />
+        </div>
         <q-form class="q-gutter-md">
           <q-list>
-            <q-item>
-              <q-item-section>
-                <q-item-label class="q-pb-xs"> Title </q-item-label>
-                <q-input
-                  name="title"
-                  v-model="form.title"
-                  :error-message="errors.title ? errors.title[0] : ''"
-                  :error="!!errors.title"
-                  filled
-                />
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label class="q-pb-xs"> Description </q-item-label>
-                <q-input
-                  name="description"
-                  v-model="form.description"
-                  :error-message="
-                    errors.description ? errors.description[0] : ''
-                  "
-                  :error="!!errors.description"
-                  filled
-                />
-              </q-item-section>
-            </q-item>
+            <div v-for="locale in locales" :key="locale">
+              <q-item v-if="locale == selectedLang">
+                <q-item-section>
+                  <q-item-label class="q-pb-xs"> Title </q-item-label>
+                  <q-input
+                    :name="localeField(locale, 'title')"
+                    v-model="form[localeField(locale, 'title')]"
+                    :error-message="
+                      errors[localeField(locale, 'title')]
+                        ? errors[localeField(locale, 'title')][0]
+                        : ''
+                    "
+                    :error="!!errors[localeField(locale, 'title')]"
+                    filled
+                  />
+                </q-item-section>
+              </q-item>
+
+              <q-item v-if="locale == selectedLang">
+                <q-item-section>
+                  <q-item-label class="q-pb-xs"> Description </q-item-label>
+                  <q-input
+                    :name="localeField(locale, 'description')"
+                    v-model="form[localeField(locale, 'description')]"
+                    :error-message="
+                      errors[localeField(locale, 'description')]
+                        ? errors[localeField(locale, 'description')][0]
+                        : ''
+                    "
+                    :error="!!errors[localeField(locale, 'description')]"
+                    filled
+                  />
+                </q-item-section>
+              </q-item>
+            </div>
             <q-item>
               <q-item-section>
                 <q-select

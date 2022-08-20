@@ -54,6 +54,9 @@ export function stripTags(str: string) {
   return str.replace(/<\/?[^>]+(>|$)/g, "");
 }
 export function shorten(str: string, no_words: number, suff = " ...") {
+  if (!str) {
+    return "";
+  }
   let newStr = str.split(" ").splice(0, no_words).join(" ");
   newStr = stripHtml(newStr);
   newStr = stripTags(newStr);

@@ -51,11 +51,10 @@ export const usePostsStore = defineStore({
     async fetchItems(...rest: [number, number, string, boolean, any]) {
       this._loading = true;
       const res = await fetchMany(url, ...rest);
-      console.log(res.data.data);
       this.posts.meta = res.data.metaData;
       this._loading = false;
       const posts = res.data.data.map((e: any) => {
-        e.title = e["tr"][currentLang].title;
+        e.title = e["tr"][currentLang]?.title;
         return e;
       });
 

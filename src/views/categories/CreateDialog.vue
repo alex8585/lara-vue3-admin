@@ -20,7 +20,7 @@ const emit = defineEmits(["change", "mount", "send"]);
 
 const dialogRef = ref();
 const selectedLang = ref("en");
-        const isShow = ref(false);
+const isShow = ref(false);
 const errors = ref<any>({});
 
 const initForm = getLocalesFields(["name"]);
@@ -55,7 +55,6 @@ function show() {
 function setErrors(err: {}) {
   errors.value = { ...err };
 }
-
 
 defineExpose({
   setErrors,

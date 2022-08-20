@@ -82,3 +82,8 @@ a {
 main h1 {
   line-height: 1rem;
 }
+
+.togle-wrapp {
+  margin-top: 10px;
+  text-align: center;
+}

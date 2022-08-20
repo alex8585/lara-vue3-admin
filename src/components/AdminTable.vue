@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import usePagination from "@/composables/pagination";
 
 import useCreateRecord from "@/composables/createRecord";
@@ -7,6 +6,7 @@ import useEditRecord from "@/composables/editRecord";
 import useAddActionsColumn from "@/composables/actionsColumn";
 import DeleteDialog from "@/components/DeleteDialog.vue";
 
+import { ref } from "vue";
 import type { Col } from "@/types/data-table";
 const props = defineProps<{
   tableName: string;

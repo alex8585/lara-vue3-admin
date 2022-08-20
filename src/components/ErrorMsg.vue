@@ -1,15 +1,18 @@
 <script lang="ts" setup>
 defineProps<{
-  error?: string | null;
+  error?: Object | null;
 }>();
 </script>
 <template>
-  <q-banner
-    v-if="error"
-    class="text-center text-lg mt-5 rounded text-white bg-red"
-  >
-    <div class="text-lg">
-      {{ error }}
-    </div>
-  </q-banner>
+  <div v-if="error">
+    <q-banner
+      :key="k"
+      v-for="(e, k) in error"
+      class="text-center text-lg mt-5 rounded text-white bg-red"
+    >
+      <div class="text-lg">
+        {{ e[0] }}
+      </div>
+    </q-banner>
+  </div>
 </template>

@@ -1,7 +1,11 @@
 import { defineStore } from "pinia";
 
+import { getApiUrl, getCurrLang } from "@/support/helpers";
 import { fetchMany } from "@/support/query";
-const url = "/api/v1/posts";
+
+const url = getApiUrl("posts");
+const currentLang = getCurrLang();
+
 interface Post {
   id?: number;
   title?: string;
@@ -47,9 +51,15 @@ export const usePostsStore = defineStore({
     async fetchItems(...rest: [number, number, string, boolean, any]) {
       this._loading = true;
       const res = await fetchMany(url, ...rest);
-      this.posts.data = res.data.data;
+      console.log(res.data.data);
       this.posts.meta = res.data.metaData;
       this._loading = false;
+      const posts = res.data.data.map((e: any) => {
+        e.title = e["tr"][currentLang].title;
+        return e;
+      });
+
+      this.posts.data = posts;
     },
   },
 });

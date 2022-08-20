@@ -8,7 +8,20 @@ export default function useEditRecord(tableRef: Ref, url: string) {
   function editRow(params: any) {
     const { row } = params;
     editDialRef.value.clearErrors();
-    editDialRef.value.set(row);
+
+    const newRow = { ...row };
+    for (const locale in row.tr) {
+      for (const field in row.tr[locale]) {
+        const newFieldName = `${locale}_${field}`;
+        const value = row.tr[locale][field];
+        newRow[newFieldName] = value;
+        delete newRow[field];
+      }
+    }
+
+    delete newRow.tr;
+
+    editDialRef.value.set(newRow);
     editDialRef.value.show();
   }
 
@@ -24,7 +37,9 @@ export default function useEditRecord(tableRef: Ref, url: string) {
       })
       .catch(function (error) {
         if (error.response.status == 403) {
-          editDialRef.value.setErrors({ global: "Unauthorized action." });
+          editDialRef.value.setErrors({
+            global: "Unauthorized action.",
+          });
         }
 
         if (error.response.data.errors) {

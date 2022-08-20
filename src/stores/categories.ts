@@ -1,8 +1,10 @@
 import { defineStore } from "pinia";
 
+import { getApiUrl, getCurrLang } from "@/support/helpers";
 import { fetchAll, fetchMany } from "@/support/query";
-const url = "/api/v1/categories";
 
+const currentLang = getCurrLang();
+const url = getApiUrl("categories");
 interface Category {
   id?: number;
   name?: string;
@@ -51,9 +53,14 @@ export const useCategoriesStore = defineStore({
     async fetchItems(...rest: [number, number, string, boolean, any]) {
       this._loading = true;
       const res = await fetchMany(url, ...rest);
-      this.categories.data = res.data.data;
       this.categories.meta = res.data.metaData;
       this._loading = false;
+      const cats = res.data.data.map((e: any) => {
+        e.name = e["tr"][currentLang].name;
+        return e;
+      });
+
+      this.categories.data = cats;
     },
 
     async getAllCategories() {

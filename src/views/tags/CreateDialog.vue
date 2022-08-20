@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import type { TagForm } from "@/types/data-table";
-
+import { getLocales, getLocalesFields } from "@/support/helpers";
 import ErrorMsg from "@/components/ErrorMsg.vue";
+
 const props = defineProps({
   initValues: {
     default: () => [],
@@ -14,15 +15,17 @@ const props = defineProps({
   },
 });
 
+const locales = getLocales();
+const localesOptions = locales.map((e) => ({ label: e, value: e }));
+
 const emit = defineEmits(["change", "mount", "send"]);
 
 const dialogRef = ref();
+const selectedLang = ref("en");
 const isShow = ref(false);
 const errors = ref<any>({});
 
-const initForm = {
-  name: null,
-};
+const initForm = getLocalesFields(["name"]);
 
 const form = ref<TagForm>(initForm);
 
@@ -40,21 +43,22 @@ function hide() {
 }
 
 function reset() {
-  //form.value.clearErrors();
-  //set(initForm);
   form.value = { ...initForm };
   errors.value = {};
   emit("change", form);
 }
 
 function show() {
+  selectedLang.value = "en";
   isShow.value = true;
 }
 
 function setErrors(err: {}) {
   errors.value = { ...err };
 }
-
+function localeField(locale, name) {
+  return `${locale}_${name}`;
+}
 defineExpose({
   setErrors,
   reset,
@@ -72,22 +76,36 @@ defineExpose({
       </q-card-section>
       <q-separator inset />
       <q-card-section class="q-pt-none">
-        <ErrorMsg :error="errors.global" />
-
+        <ErrorMsg :error="errors" />
+        <div class="togle-wrapp">
+          <q-btn-toggle
+            v-model="selectedLang"
+            push
+            glossy
+            toggle-color="primary"
+            :options="localesOptions"
+          />
+        </div>
         <q-form class="q-gutter-md">
           <q-list>
-            <q-item>
-              <q-item-section>
-                <q-item-label class="q-pb-xs"> Name </q-item-label>
-                <q-input
-                  name="name"
-                  v-model="form.name"
-                  :error-message="errors.name ? errors.name[0] : ''"
-                  :error="!!errors.name"
-                  filled
-                />
-              </q-item-section>
-            </q-item>
+            <div v-for="locale in locales" :key="locale">
+              <q-item v-if="locale == selectedLang">
+                <q-item-section>
+                  <q-item-label class="q-pb-xs"> Name </q-item-label>
+                  <q-input
+                    :name="localeField(locale, 'name')"
+                    v-model="form[localeField(locale, 'name')]"
+                    :error-message="
+                      errors[localeField(locale, 'name')]
+                        ? errors[localeField(locale, 'name')][0]
+                        : ''
+                    "
+                    :error="!!errors[localeField(locale, 'name')]"
+                    filled
+                  />
+                </q-item-section>
+              </q-item>
+            </div>
           </q-list>
         </q-form>
       </q-card-section>
@@ -100,3 +118,9 @@ defineExpose({
     </q-card>
   </q-dialog>
 </template>
+<style lang="css" scoped>
+.togle-wrapp {
+  margin-top: 10px;
+  text-align: center;
+}
+</style>

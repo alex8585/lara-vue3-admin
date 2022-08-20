@@ -1,6 +1,10 @@
 import { defineStore } from "pinia";
-const url = "/api/v1/tags";
+import { getApiUrl, getCurrLang } from "@/support/helpers";
+
 import { fetchAll, fetchMany, fetchUrl } from "@/support/query";
+const url = getApiUrl("tags");
+
+const currentLang = getCurrLang();
 interface Tag {
   id?: number;
   name?: string;
@@ -56,9 +60,15 @@ export const useTagsStore = defineStore({
     async fetchItems(...rest: [number, number, string, boolean, any]) {
       this._loading = true;
       const res = await fetchMany(url, ...rest);
-      this.tags.data = res.data.data;
+
       this.tags.meta = res.data.metaData;
       this._loading = false;
+      const tags = res.data.data.map((e: any) => {
+        e.name = e["tr"][currentLang].name;
+        return e;
+      });
+
+      this.tags.data = tags;
     },
 
     async fetchTag(id: number) {

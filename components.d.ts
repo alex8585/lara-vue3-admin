@@ -10,6 +10,7 @@ declare module "@vue/runtime-core" {
     AuthLayout: typeof import("./src/layouts/AuthLayout.vue")["default"];
     DeleteDialog: typeof import("./src/components/DeleteDialog.vue")["default"];
     ErrorMsg: typeof import("./src/components/ErrorMsg.vue")["default"];
+    LangSelect: typeof import("./src/components/LangSelect.vue")["default"];
     LogoutView: typeof import("./src/components/LogoutView.vue")["default"];
     RouterLink: typeof import("vue-router")["RouterLink"];
     RouterView: typeof import("vue-router")["RouterView"];

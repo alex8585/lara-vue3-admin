@@ -1,7 +1,12 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 
-import { localeField, getLocales, getLocalesFields } from "@/support/helpers";
+import {
+  getDefaultFromsLocale,
+  localeField,
+  getLocales,
+  getLocalesFields,
+} from "@/support/helpers";
 import ErrorMsg from "@/components/ErrorMsg.vue";
 const props = defineProps({
   initValues: {
@@ -13,13 +18,15 @@ const props = defineProps({
     type: Boolean,
   },
 });
+const defaultLocale = getDefaultFromsLocale();
+
 const locales = getLocales();
 const localesOptions = locales.map((e) => ({ label: e, value: e }));
 
 const emit = defineEmits(["change", "mount", "send"]);
 
 const dialogRef = ref();
-const selectedLang = ref("en");
+const selectedLang = ref(defaultLocale);
 const isShow = ref(false);
 const errors = ref<any>({});
 
@@ -48,7 +55,7 @@ function reset() {
 }
 
 function show() {
-  selectedLang.value = "en";
+  selectedLang.value = defaultLocale;
   isShow.value = true;
 }
 

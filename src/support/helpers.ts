@@ -8,10 +8,14 @@ export function getLocales() {
   return ["en", "uk", "ru"];
 }
 
+export function getDefaultFromsLocale() {
+  return import.meta.env.VITE_DEFAULT_FORMS_LANG as string;
+}
+
 export function getCurrLang() {
   let locale = Cookies.get("locale");
   if (!locale) {
-    locale = "ru";
+    locale = import.meta.env.VITE_DEFAULT_LANG as string;
     Cookies.set("locale", locale);
   }
   return locale;

@@ -4,9 +4,12 @@ import type { PostForm, TagType } from "@/types/data-table";
 import { useTagsStore } from "@/stores/tags";
 import { useCategoriesStore } from "@/stores/categories";
 import ErrorMsg from "@/components/ErrorMsg.vue";
-import { localeField, getLocales, getLocalesFields } from "@/support/helpers";
-const tags = useTagsStore();
-const cats = useCategoriesStore();
+import {
+  getDefaultFromsLocale,
+  localeField,
+  getLocales,
+  getLocalesFields,
+} from "@/support/helpers";
 
 const props = defineProps({
   initValues: {
@@ -18,13 +21,19 @@ const props = defineProps({
     type: Boolean,
   },
 });
+
+const tags = useTagsStore();
+const cats = useCategoriesStore();
+
+const defaultLocale = getDefaultFromsLocale();
+
 const locales = getLocales();
 const localesOptions = locales.map((e) => ({ label: e, value: e }));
 const emit = defineEmits(["change", "mount", "send"]);
 
 const dialogRef = ref();
 const isShow = ref(false);
-const selectedLang = ref("en");
+const selectedLang = ref(defaultLocale);
 const errors = ref<any>({});
 
 const initFormTransFilds = getLocalesFields(["title", "description"]);
@@ -87,7 +96,7 @@ function reset() {
 }
 
 function show() {
-  selectedLang.value = "en";
+  selectedLang.value = defaultLocale;
   isShow.value = true;
 }
 

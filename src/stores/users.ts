@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 
+import { getApiUrl } from "@/support/helpers";
 import { fetchMany } from "@/support/query";
-const url = "/api/v1/users";
+const url = getApiUrl("users");
+
 interface User {
   id?: number;
   title?: string;

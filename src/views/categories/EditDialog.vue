@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import type { CategoryForm } from "@/types/data-table";
-import { localeField, getLocales, getLocalesFields } from "@/support/helpers";
 
+import {
+  getDefaultFromsLocale,
+  localeField,
+  getLocales,
+  getLocalesFields,
+} from "@/support/helpers";
 import ErrorMsg from "@/components/ErrorMsg.vue";
+
 const props = defineProps({
   initValues: {
     default: () => [],
@@ -14,11 +20,13 @@ const props = defineProps({
     type: Boolean,
   },
 });
+
+const defaultLocale = getDefaultFromsLocale();
 const locales = getLocales();
 const localesOptions = locales.map((e) => ({ label: e, value: e }));
 const emit = defineEmits(["change", "mount", "send"]);
 
-const selectedLang = ref("en");
+const selectedLang = ref(defaultLocale);
 const isShow = ref(false);
 
 const initForm = getLocalesFields(["name"]);
@@ -55,7 +63,7 @@ function reset() {
 
 function show() {
   isShow.value = true;
-  selectedLang.value = "en";
+  selectedLang.value = defaultLocale;
 }
 
 function setErrors(err: {}) {

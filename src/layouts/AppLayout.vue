@@ -4,6 +4,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import useAuth from "@/composables/auth";
 
+import LangSelect from "@/components/LangSelect.vue";
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -54,7 +55,9 @@ function isCurrentUrl(url: "string") {
         />
 
         <q-toolbar-title> Admin panel </q-toolbar-title>
-        <div class="q-pa-md">
+        <div class="select-wrapp q-pa-md">
+          <LangSelect />
+
           <q-btn-dropdown color="primary" label="Account">
             <q-list>
               <RouterLink class="flex items-center" to="/logout">
@@ -98,7 +101,9 @@ function isCurrentUrl(url: "string") {
 </template>
 <style lang="scss">
 @import "@/assets/base.css";
-
+.select-wrapp {
+  display: flex;
+}
 a {
   &:hover {
     background-color: #dfdfdf !important;

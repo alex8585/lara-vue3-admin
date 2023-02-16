@@ -29,3 +29,4 @@ coverage
 /tags
 .vscode
 .env
+components.d.ts
